@@ -1,13 +1,16 @@
-pub mod constants;
-pub mod error;
 pub mod instructions;
 pub mod state;
+pub mod constants;
+pub mod errors;
+pub mod events;
+pub mod utils;
 
 use anchor_lang::prelude::*;
 
 pub use constants::*;
-pub use instructions::*;
-pub use state::*;
+pub use errors::*;
+pub use events::*;
+pub use utils::*;
 
 declare_id!("Dc5YsYCwHU5fMQb7Fz4qEWpnfSQLY25yLtRrDh1qaKon");
 
@@ -15,7 +18,19 @@ declare_id!("Dc5YsYCwHU5fMQb7Fz4qEWpnfSQLY25yLtRrDh1qaKon");
 pub mod novaforge {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        initialize::handler(ctx)
+    pub fn initialize_planet(
+        ctx: Context<InitializePlanet>,
+        planet_type: PlanetType,
+    ) -> Result<()> {
+        instructions::initialize_planet::handler(
+            ctx,
+            planet_type,
+        )
+    }
+
+     pub fn colonize_planet(
+        ctx: Context<ColonizePlanet>,
+    ) -> Result<()> {
+        instructions::colonize_planet::handler(ctx)
     }
 }
