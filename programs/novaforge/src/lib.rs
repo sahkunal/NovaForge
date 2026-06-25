@@ -3,8 +3,7 @@ pub mod constants;
 pub mod errors;
 pub mod events;
 pub mod utils;
-use instructions::*;
-
+pub mod instructions;
 use anchor_lang::prelude::*;
 pub use constants::*;
 pub use errors::*;

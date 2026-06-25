@@ -21,7 +21,9 @@ custom-panic = []
 
 
 [dependencies]
-anchor-lang = "1.0.2"
+anchor-lang = "0.31.1"
+shared = { path = "../../shared" }
+
 
 [dev-dependencies]
 litesvm = "0.10.0"
