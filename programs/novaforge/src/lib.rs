@@ -1,12 +1,11 @@
-pub mod instructions;
 pub mod state;
 pub mod constants;
 pub mod errors;
 pub mod events;
 pub mod utils;
+use instructions::*;
 
 use anchor_lang::prelude::*;
-
 pub use constants::*;
 pub use errors::*;
 pub use events::*;
