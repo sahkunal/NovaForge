@@ -7,8 +7,10 @@ use anchor_lang::prelude::*;
     Copy,
     Debug,
     PartialEq,
-    Eq
+    Eq,
+    InitSpace,
 )]
+
 pub enum PlanetType {
     Mining,
     Energy,
@@ -23,7 +25,8 @@ pub enum PlanetType {
     Copy,
     Debug,
     PartialEq,
-    Eq
+    Eq,
+    InitSpace,
 )]
 pub enum Rarity {
     Common,

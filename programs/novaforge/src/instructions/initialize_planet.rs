@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 use shared::{PlanetType, Rarity, constants::*};
-use crate::{state::Planet, events::PlanetCreated, errors::ErrorCode};
+use crate::{state::Planet, events::PlanetCreated};
 
 #[derive(Accounts)]
 pub struct InitializePlanet<'info> {
@@ -10,7 +10,7 @@ pub struct InitializePlanet<'info> {
     #[account(
         init,
         payer = owner,
-        space = Planet::INIT_SPACE,
+        space =8+ Planet::INIT_SPACE,
         seeds = [b"planet", asset.key().as_ref()],
         bump
     )]
@@ -54,8 +54,6 @@ pub fn handler(
     planet.last_claim_ts   = now;
     planet.created_at      = now;
     planet.bump            = ctx.bumps.planet;
-
-    // TODO: CPI to mpl_core_program CreateV1 to mint the NFT Asset
 
     emit!(PlanetCreated {
         owner:       planet.owner,

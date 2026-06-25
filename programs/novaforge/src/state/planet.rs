@@ -1,4 +1,5 @@
 use anchor_lang::prelude::*;
+use shared::{PlanetType, Rarity};
 #[account]
 #[derive(InitSpace)]
 pub struct Planet {
