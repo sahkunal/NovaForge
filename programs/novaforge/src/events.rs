@@ -17,9 +17,6 @@ pub struct PlanetColonized {
 pub struct PlanetUncolonized {
     pub owner:          Pubkey,
     pub planet:         Pubkey,   
-    pub iron_flushed:   u64,
-    pub gold_flushed:   u64,
-    pub uranium_flushed:u64,
     pub timestamp:      i64,
 }
 

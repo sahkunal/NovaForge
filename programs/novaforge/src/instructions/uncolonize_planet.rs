@@ -29,20 +29,17 @@ pub fn handler(
         NovaForgeError::PlanetNotColonized
     );
 
-    // Future:
-    // - Stop resource generation
-    // - Release territory
-    // - Remove military
-    // - Reset colonization buffs
+    // below are the future upgradation which are needed:
+    //  Stop resource generation
+    //  Release territory
+    //  Remove military
+    //  Reset colonization buffs
 
     planet.colonized = false;
 
     emit!(PlanetUncolonized {
         owner: planet.owner,
         planet: planet.asset,
-        iron_flushed: planet.iron_balance,
-        gold_flushed: planet.gold_balance,
-        uranium_flushed: planet.uranium_balance,
         timestamp: Clock::get()?.unix_timestamp,
     });
 
