@@ -14,3 +14,6 @@ NovaForge is a Solana dApp where Planet NFTs are productive assets. You mint a p
 Core loop:
 
 Mint → Colonize → Generate Resources → Claim → Upgrade → Defend → Sell
+
+
+{under development}
