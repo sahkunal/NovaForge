@@ -57,8 +57,8 @@ pub struct PlanetSold {
     pub seller:         Pubkey,
     pub buyer:          Pubkey,
     pub price:          u64,     
-    pub planet:         Pubkey,      // which asset was sold
-    pub fee_lamports:   u64,         // 1% fee amount — useful for analytics
+    pub planet:         Pubkey,      
+    pub fee_lamports:   u64,       
     pub timestamp:      i64,
 }
 

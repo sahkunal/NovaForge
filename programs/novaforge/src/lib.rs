@@ -12,13 +12,16 @@ use shared::{PlanetType, Rarity};
 use crate::instructions::{
     initialize_planet::InitializePlanet,
     colonize_planet::ColonizePlanet,
+    uncolonize_planet::UncolonizePlanet,
 };
 
 declare_id!("Dc5YsYCwHU5fMQb7Fz4qEWpnfSQLY25yLtRrDh1qaKon");
 
 #[program]
 pub mod novaforge {
-    use super::*;
+    use crate::events::PlanetUncolonized;
+
+use super::*;
 
     pub fn initialize_planet(
         ctx: Context<InitializePlanet>,
@@ -37,4 +40,9 @@ pub mod novaforge {
     ) -> Result<()> {
         instructions::colonize_planet::handler(ctx)
     }
+    pub fn uncolonized_planet(
+        ctx:Context<UncolonizePlanet>)->Result<()>{
+            instructions::uncolonize_planet::handler(ctx)
+        }
+
 }
