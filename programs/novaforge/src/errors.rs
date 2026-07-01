@@ -17,4 +17,10 @@ pub enum NovaForgeError {
 
     #[msg("Unauthorized")]
     Unauthorized,
+
+    #[msg("Planet destroyed")]
+    PlanetDestroyed,
+
+    #[msg("Nothing to claim")]
+    NothingToClaim,
 }

@@ -20,15 +20,6 @@ pub struct PlanetUncolonized {
     pub timestamp:      i64,
 }
 
-#[event]
-pub struct ResourcesClaimed {
-    pub owner:     Pubkey,
-    pub iron:      u64,
-    pub gold:      u64,
-    pub uranium:   u64,
-    pub planet:    Pubkey,   
-    pub timestamp: i64,
-}
 
 #[event]
 pub struct PlanetUpgraded {
@@ -63,5 +54,16 @@ pub struct PlanetSold {
 pub struct ListingCancelled {
     pub seller:    Pubkey,
     pub planet:    Pubkey,
+    pub timestamp: i64,
+}
+
+#[event]
+pub struct ResourcesClaimed {
+    pub owner: Pubkey,
+    pub planet: Pubkey,
+    pub iron_claimed: u64,
+    pub gold_claimed: u64,
+    pub uranium_claimed: u64,
+    pub threat_level: u8,
     pub timestamp: i64,
 }

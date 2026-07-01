@@ -45,4 +45,9 @@ use super::*;
             instructions::uncolonize_planet::handler(ctx)
         }
 
+    pub fn claim_resources(
+    ctx: Context<ClaimResources>,
+) -> Result<()> {
+    instructions::claim_resources::handler(ctx)
+}
 }

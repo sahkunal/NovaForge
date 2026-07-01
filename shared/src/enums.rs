@@ -16,6 +16,7 @@ pub enum PlanetType {
     Energy,
     Luxury,
     Research,
+    Military
 }
 
 #[derive(

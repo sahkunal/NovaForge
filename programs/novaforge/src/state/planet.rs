@@ -34,4 +34,7 @@ pub struct Planet {
     pub created_at: i64,
 
     pub bump: u8,
+    
+    pub threat_level: u8,
+    pub destroyed: bool,
 }
