@@ -13,6 +13,8 @@ use crate::instructions::{
     initialize_planet::InitializePlanet,
     colonize_planet::ColonizePlanet,
     uncolonize_planet::UncolonizePlanet,
+    claim_resource::ClaimResources,
+    upgrade_military::UpgradeMilitary,
 };
 
 declare_id!("Dc5YsYCwHU5fMQb7Fz4qEWpnfSQLY25yLtRrDh1qaKon");
@@ -53,5 +55,11 @@ pub fn upgrade_military(
     ctx: Context<UpgradeMilitary>,
 ) -> Result<()> {
     instructions::upgrade_military::handler(ctx)
+}
+
+pub fn upgrade_planet(
+    ctx: Context<UpgradePlanet>,
+) -> Result<()> {
+    instructions::upgrade_planet::handler(ctx)
 }
 }
