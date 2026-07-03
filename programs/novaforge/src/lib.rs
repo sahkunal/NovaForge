@@ -19,8 +19,6 @@ declare_id!("Dc5YsYCwHU5fMQb7Fz4qEWpnfSQLY25yLtRrDh1qaKon");
 
 #[program]
 pub mod novaforge {
-    use crate::events::PlanetUncolonized;
-
 use super::*;
 
     pub fn initialize_planet(
@@ -49,5 +47,11 @@ use super::*;
     ctx: Context<ClaimResources>,
 ) -> Result<()> {
     instructions::claim_resources::handler(ctx)
+}
+
+pub fn upgrade_military(
+    ctx: Context<UpgradeMilitary>,
+) -> Result<()> {
+    instructions::upgrade_military::handler(ctx)
 }
 }

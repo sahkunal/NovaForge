@@ -19,6 +19,14 @@ pub enum PlanetType {
     Military
 }
 
+pub enum MonsterType {
+    RockGolem    = 0,
+    SpacePirates = 1,
+    AlienSwarm   = 2,
+    PlasmaWraith = 3, 
+    VoidTitan    = 4,  
+}
+
 #[derive(
     AnchorSerialize,
     AnchorDeserialize,

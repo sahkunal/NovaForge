@@ -23,4 +23,13 @@ pub enum NovaForgeError {
 
     #[msg("Nothing to claim")]
     NothingToClaim,
+
+    #[msg("planet inactive")]
+    PlanetInactive,
+   
+    #[msg("time stamp is under flow ")]
+    TimestampUnderflow,
+
+    #[msg("over flow")]
+    OverFlow,
 }

@@ -37,4 +37,6 @@ pub struct Planet {
     
     pub threat_level: u8,
     pub destroyed: bool,
+
+    pub inactive: bool,
 }

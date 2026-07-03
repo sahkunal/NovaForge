@@ -67,3 +67,9 @@ pub struct ResourcesClaimed {
     pub threat_level: u8,
     pub timestamp: i64,
 }
+pub struct MilitaryUpgraded{
+    pub owner: Pubkey,
+    pub planet: Pubkey,
+    pub military_power: u32,
+    pub timestamp: i64,
+}
