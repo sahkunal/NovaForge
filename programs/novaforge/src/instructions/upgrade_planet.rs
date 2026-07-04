@@ -27,7 +27,6 @@ pub fn handler(
 
     let planet = &mut ctx.accounts.planet;
 
-    // ---------------- Guards ----------------
 
     require!(
         planet.colonized,
@@ -39,7 +38,6 @@ pub fn handler(
         NovaForgeError::PlanetDestroyed
     );
 
-    // ---------------- Upgrade Cost ----------------
 
     let level = planet.level as u64;
 
@@ -73,13 +71,11 @@ pub fn handler(
         NovaForgeError::InsufficientResources
     );
 
-    // ---------------- Deduct Resources ----------------
 
     planet.iron_balance -= iron_cost;
     planet.gold_balance -= gold_cost;
     planet.uranium_balance -= uranium_cost;
 
-    // ---------------- Upgrade Stats ----------------
 
     planet.level += 1;
 
@@ -91,7 +87,6 @@ pub fn handler(
 
     planet.researchers += RESEARCHERS_PER_LEVEL;
 
-    // ---------------- Event ----------------
 
     emit!(PlanetUpgraded {
     owner: planet.owner,

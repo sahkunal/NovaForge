@@ -25,7 +25,6 @@ pub struct ClaimResources<'info> {
 pub fn handler(ctx: Context<ClaimResources>) -> Result<()> {
     let planet = &mut ctx.accounts.planet;
 
-    // ── guards ────────────────────────────────────────────
     require!(planet.colonized, NovaForgeError::PlanetNotColonized);
     require!(!planet.inactive, NovaForgeError::PlanetInactive);
 
@@ -36,11 +35,9 @@ pub fn handler(ctx: Context<ClaimResources>) -> Result<()> {
 
     require!(elapsed > 0, NovaForgeError::NothingToClaim);
 
-    // ── threat_level — time-based, reset on claim ─────────
     let hours_unclaimed = (elapsed / 3600).min(100) as u8;
     planet.threat_level = hours_unclaimed;
 
-    // ── lazy monster evaluation before generating ─────────
     let effective_threat = match planet.planet_type {
         PlanetType::Military => planet.threat_level
             .saturating_sub(MILITARY_THREAT_REDUCTION),
@@ -48,9 +45,6 @@ pub fn handler(ctx: Context<ClaimResources>) -> Result<()> {
     };
 
     if effective_threat >= 50 {
-        // monster struck during the window
-        // apply_monster_damage called here in future
-        // for MVP: zero out balances, set inactive on Warlord
         let tier = match effective_threat {
             90..=100 => 3u8, // Warlord
             75..=89  => 2,   // Raider
@@ -58,7 +52,6 @@ pub fn handler(ctx: Context<ClaimResources>) -> Result<()> {
         };
         apply_damage(planet, tier)?;
 
-        // if Warlord — planet goes inactive, return early
         if tier == 3 {
             planet.inactive      = true;
             planet.threat_level  = 100;
@@ -76,13 +69,11 @@ pub fn handler(ctx: Context<ClaimResources>) -> Result<()> {
         }
     }
 
-    // ── base generation: rate × elapsed_secs ─────────────
     let base = planet
         .production_rate
         .checked_mul(elapsed)
         .ok_or(NovaForgeError::OverFlow)?;
 
-    // ── per-type bonus (+50% = ×3/2) ─────────────────────
     let iron_gen = match planet.planet_type {
         PlanetType::Mining   => base.saturating_mul(3) / 2,
         PlanetType::Military => base / 2,
@@ -100,7 +91,6 @@ pub fn handler(ctx: Context<ClaimResources>) -> Result<()> {
         _                    => base,
     };
 
-    // ── storage cap: production_rate × MAX_STORAGE_SECS ──
     let max = planet
         .production_rate
         .saturating_mul(MAX_STORAGE_SECS);
@@ -118,7 +108,6 @@ pub fn handler(ctx: Context<ClaimResources>) -> Result<()> {
         .saturating_add(uranium_gen)
         .min(max);
 
-    // ── reset after successful claim ──────────────────────
     planet.threat_level  = 0;
     planet.last_claim_ts = now;
 

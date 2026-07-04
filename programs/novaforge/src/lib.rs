@@ -15,6 +15,7 @@ use crate::instructions::{
     uncolonize_planet::UncolonizePlanet,
     claim_resource::ClaimResources,
     upgrade_military::UpgradeMilitary,
+    upgrade_planet::UpgradePlanet,
 };
 
 declare_id!("Dc5YsYCwHU5fMQb7Fz4qEWpnfSQLY25yLtRrDh1qaKon");
