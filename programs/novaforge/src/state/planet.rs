@@ -36,8 +36,6 @@ pub struct Planet {
     pub bump: u8,
     
     pub threat_level: u8,
-    pub destroyed: bool,
-
     pub inactive: bool,
     pub listed: bool,
     pub price: u64,

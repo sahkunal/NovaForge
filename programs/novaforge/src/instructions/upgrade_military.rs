@@ -32,8 +32,8 @@ pub fn handler(
     );
 
     require!(
-        !planet.destroyed,
-        NovaForgeError::PlanetDestroyed
+        !planet.inactive,
+        NovaForgeError::PlanetInactive
     );
 
     let iron_cost =

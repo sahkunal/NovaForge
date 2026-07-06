@@ -18,9 +18,6 @@ pub enum NovaForgeError {
     #[msg("Unauthorized")]
     Unauthorized,
 
-    #[msg("Planet destroyed")]
-    PlanetDestroyed,
-
     #[msg("Nothing to claim")]
     NothingToClaim,
 
@@ -40,5 +37,8 @@ pub enum NovaForgeError {
     PlanetStillColonized,
 
     #[msg("price is invalid")]
-    InvalidPrice
+    InvalidPrice,
+
+    #[msg("max level reached")]
+    MaxLevelReached,
 }

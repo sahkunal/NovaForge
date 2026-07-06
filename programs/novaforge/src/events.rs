@@ -1,4 +1,5 @@
 use anchor_lang::prelude::*;
+use shared::{PlanetType, Rarity};
 #[event]
 pub struct PlanetCreated {
     pub owner:       Pubkey,
@@ -70,4 +71,14 @@ pub struct PlanetUpgraded {
     pub power: u32,
     pub production_rate: u64,
     pub timestamp: i64,
+}
+
+#[event]
+pub struct PlanetRepaired {
+    pub owner:         Pubkey,
+    pub planet:        Pubkey,
+    pub iron_spent:    u64,
+    pub gold_spent:    u64,
+    pub uranium_spent: u64,
+    pub timestamp:     i64,
 }

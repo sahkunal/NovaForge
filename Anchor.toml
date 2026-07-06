@@ -1,4 +1,6 @@
 [toolchain]
+anchor_version = "0.31.1"   
+solana_version = "2.1.0"
 package_manager = "yarn"
 
 [features]
@@ -6,7 +8,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-novaforge = "Dc5YsYCwHU5fMQb7Fz4qEWpnfSQLY25yLtRrDh1qaKon"
+novaforge = "5N4YA8DXFT2zuYWo627An8AN3Lx9eE5vQZV8v4LCCRWb"
 
 [provider]
 cluster = "localnet"

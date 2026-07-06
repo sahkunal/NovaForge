@@ -18,13 +18,23 @@ pub enum PlanetType {
     Research,
     Military
 }
+#[derive(
+    AnchorSerialize,
+    AnchorDeserialize,
+    Clone,
+    Copy,
+    Debug,
+    PartialEq,
+    Eq,
+    InitSpace,
+)]
 
 pub enum MonsterType {
-    RockGolem    = 0,
-    SpacePirates = 1,
-    AlienSwarm   = 2,
-    PlasmaWraith = 3, 
-    VoidTitan    = 4,  
+    RockGolem,
+    SpacePirates,
+    AlienSwarm,
+    PlasmaWraith,
+    VoidTitan,
 }
 
 #[derive(
@@ -54,3 +64,4 @@ impl Rarity {
         }
     }
 }
+

@@ -1,4 +1,5 @@
 use anchor_lang::prelude::*;
+use crate::events::PlanetRepaired;
 
 use crate::{
     state::Planet,
@@ -24,8 +25,8 @@ pub fn handler(ctx: Context<RepairPlanet>) -> Result<()> {
     let planet = &mut ctx.accounts.planet;
 
     require!(
-        planet.destroyed,
-        NovaForgeError::PlanetNotDestroyed
+        planet.inactive,
+        NovaForgeError::PlanetInactive
     );
 
     require!(
@@ -47,8 +48,18 @@ pub fn handler(ctx: Context<RepairPlanet>) -> Result<()> {
     planet.gold_balance -= REPAIR_GOLD_COST;
     planet.uranium_balance -= REPAIR_URANIUM_COST;
 
-    planet.destroyed = false;
+    planet.inactive = false;
     planet.threat_level = 0;
+
+    
+    emit!(PlanetRepaired {
+    owner:         planet.owner,
+    planet:        planet.asset,
+    iron_spent:    REPAIR_IRON_COST,
+    gold_spent:    REPAIR_GOLD_COST,
+    uranium_spent: REPAIR_URANIUM_COST,
+    timestamp:     Clock::get()?.unix_timestamp,
+});
 
     Ok(())
 }

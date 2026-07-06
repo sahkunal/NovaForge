@@ -1,11 +1,11 @@
+use anchor_lang::prelude::*;
+
 pub mod state;
 pub mod constants;
 pub mod errors;
 pub mod events;
 pub mod utils;
 pub mod instructions;
-
-use anchor_lang::prelude::*;
 
 use shared::{PlanetType, Rarity};
 
@@ -21,7 +21,7 @@ use instructions::{
     list_planet::ListPlanet,
 };
 
-declare_id!("Dc5YsYCwHU5fMQb7Fz4qEWpnfSQLY25yLtRrDh1qaKon");
+declare_id!("5N4YA8DXFT2zuYWo627An8AN3Lx9eE5vQZV8v4LCCRWb");
 
 #[program]
 pub mod novaforge {
@@ -39,12 +39,12 @@ use super::*;
         )
     }
 
-    pub fn colonize_planet(
+     pub fn colonize_planet(
         ctx: Context<ColonizePlanet>,
     ) -> Result<()> {
         instructions::colonize_planet::handler(ctx)
     }
-    pub fn uncolonized_planet(
+    pub fn uncolonize_planet(
         ctx:Context<UncolonizePlanet>)->Result<()>{
             instructions::uncolonize_planet::handler(ctx)
         }

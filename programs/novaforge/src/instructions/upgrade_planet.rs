@@ -34,8 +34,12 @@ pub fn handler(
     );
 
     require!(
-        !planet.destroyed,
-        NovaForgeError::PlanetDestroyed
+        !planet.inactive,
+        NovaForgeError::PlanetInactive
+    );
+    require!(
+        planet.level < MAX_LEVEL,
+        NovaForgeError::MaxLevelReached
     );
 
 
@@ -55,6 +59,12 @@ pub fn handler(
         UPGRADE_URANIUM_COST
             .checked_mul(level)
             .ok_or(NovaForgeError::OverFlow)?;
+
+    if planet.planet_type == shared::PlanetType::Research {
+    iron_cost    = iron_cost    * 9 / 10;
+    gold_cost    = gold_cost    * 9 / 10;
+    uranium_cost = uranium_cost * 9 / 10;
+}
 
     require!(
         planet.iron_balance >= iron_cost,
@@ -78,6 +88,13 @@ pub fn handler(
 
 
     planet.level += 1;
+
+    let mil_gain = if planet.planet_type == shared::PlanetType::Military {
+    MILITARY_POWER_PER_LEVEL * 2
+} else {
+    MILITARY_POWER_PER_LEVEL
+};
+planet.military_power = planet.military_power.saturating_add(mil_gain);
 
     planet.power += POWER_PER_LEVEL;
 

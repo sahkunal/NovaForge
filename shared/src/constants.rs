@@ -38,3 +38,7 @@ pub const MILITARY_UPGRADE_GOLD_COST: u64 = 40;
 pub const MILITARY_UPGRADE_URANIUM_COST: u64 = 25;
 
 pub const MILITARY_POWER_INCREMENT: u32 = 25;
+
+pub const REPAIR_IRON_COST:    u64 = 200;
+pub const REPAIR_GOLD_COST:    u64 = 50;
+pub const REPAIR_URANIUM_COST: u64 = 25;
