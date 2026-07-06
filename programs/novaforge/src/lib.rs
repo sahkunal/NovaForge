@@ -9,13 +9,16 @@ use anchor_lang::prelude::*;
 
 use shared::{PlanetType, Rarity};
 
-use crate::instructions::{
+use instructions::{
     initialize_planet::InitializePlanet,
     colonize_planet::ColonizePlanet,
     uncolonize_planet::UncolonizePlanet,
-    claim_resource::ClaimResources,
+    claim_resources::ClaimResources,
     upgrade_military::UpgradeMilitary,
     upgrade_planet::UpgradePlanet,
+    repair_planet::RepairPlanet,
+    check_threat::CheckThreat,
+    list_planet::ListPlanet,
 };
 
 declare_id!("Dc5YsYCwHU5fMQb7Fz4qEWpnfSQLY25yLtRrDh1qaKon");
@@ -62,5 +65,23 @@ pub fn upgrade_planet(
     ctx: Context<UpgradePlanet>,
 ) -> Result<()> {
     instructions::upgrade_planet::handler(ctx)
+}
+pub fn repair_planet(
+    ctx: Context<RepairPlanet>,
+) -> Result<()> {
+    instructions::repair_planet::handler(ctx)
+}
+
+pub fn check_threat(
+    ctx: Context<CheckThreat>,
+) -> Result<()> {
+    instructions::check_threat::handler(ctx)
+}
+
+pub fn list_planet(
+    ctx: Context<ListPlanet>,
+    price: u64,
+) -> Result<()> {
+    instructions::list_planet::handler(ctx, price)
 }
 }

@@ -32,4 +32,13 @@ pub enum NovaForgeError {
 
     #[msg("over flow")]
     OverFlow,
+
+    #[msg("planet not destroyed")]
+    PlanetNotDestroyed,
+
+    #[msg("planet is still colonized")]
+    PlanetStillColonized,
+
+    #[msg("price is invalid")]
+    InvalidPrice
 }

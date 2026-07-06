@@ -39,4 +39,7 @@ pub struct Planet {
     pub destroyed: bool,
 
     pub inactive: bool,
+    pub listed: bool,
+    pub price: u64,
+
 }
