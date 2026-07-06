@@ -37,6 +37,7 @@ pub enum MonsterType {
     VoidTitan,
 }
 
+
 #[derive(
     AnchorSerialize,
     AnchorDeserialize,
@@ -64,4 +65,3 @@ impl Rarity {
         }
     }
 }
-
