@@ -41,4 +41,7 @@ pub enum NovaForgeError {
 
     #[msg("max level reached")]
     MaxLevelReached,
+
+    #[msg("cant buy own planet")]
+    CannotBuyOwnPlanet,
 }

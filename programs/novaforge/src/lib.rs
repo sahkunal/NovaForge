@@ -19,9 +19,10 @@ use instructions::{
     repair_planet::RepairPlanet,
     check_threat::CheckThreat,
     list_planet::ListPlanet,
+    buy_planet::BuyPlanet,
 };
 
-declare_id!("5N4YA8DXFT2zuYWo627An8AN3Lx9eE5vQZV8v4LCCRWb");
+declare_id!("ChpT5aE2vSinZMbgY7bpsafS9jwFVEc1jFvVi9XoB83f");
 
 #[program]
 pub mod novaforge {
@@ -83,5 +84,10 @@ pub fn list_planet(
     price: u64,
 ) -> Result<()> {
     instructions::list_planet::handler(ctx, price)
+}
+pub fn buy_planet(
+    ctx: Context<BuyPlanet>,
+) -> Result<()> {
+    instructions::buy_planet::handler(ctx)
 }
 }

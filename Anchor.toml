@@ -8,7 +8,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-novaforge = "5N4YA8DXFT2zuYWo627An8AN3Lx9eE5vQZV8v4LCCRWb"
+novaforge = "ChpT5aE2vSinZMbgY7bpsafS9jwFVEc1jFvVi9XoB83f"
 
 [provider]
 cluster = "localnet"
