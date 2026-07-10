@@ -1,5 +1,8 @@
 use anchor_lang::prelude::*;
-use anchor_lang::system_program;
+use anchor_lang::solana_program::{
+    program::invoke,
+    system_instruction,
+};
 
 use crate::{
     state::Planet,
@@ -52,31 +55,36 @@ pub fn handler(ctx: Context<BuyPlanet>) -> Result<()> {
         .ok_or(NovaForgeError::OverFlow)?;
 
     // Transfer to seller
-    system_program::transfer(
-    CpiContext::new(
-        ctx.accounts.system_program.to_account_info(),
-        system_program::Transfer {
-            from: ctx.accounts.buyer.to_account_info(),
-            to: ctx.accounts.seller.to_account_info(),
-        },
+// Transfer to seller
+invoke(
+    &system_instruction::transfer(
+        &ctx.accounts.buyer.key(),
+        &ctx.accounts.seller.key(),
+        seller_amount,
     ),
-    seller_amount,
+    &[
+        ctx.accounts.buyer.to_account_info(),
+        ctx.accounts.seller.to_account_info(),
+        ctx.accounts.system_program.to_account_info(),
+    ],
 )?;
 
-system_program::transfer(
-    CpiContext::new(
-        ctx.accounts.system_program.to_account_info(),
-        system_program::Transfer {
-            from: ctx.accounts.buyer.to_account_info(),
-            to: ctx.accounts.treasury.to_account_info(),
-        },
+// Transfer fee to treasury
+invoke(
+    &system_instruction::transfer(
+        &ctx.accounts.buyer.key(),
+        &ctx.accounts.treasury.key(),
+        fee,
     ),
-    fee,
+    &[
+        ctx.accounts.buyer.to_account_info(),
+        ctx.accounts.treasury.to_account_info(),
+        ctx.accounts.system_program.to_account_info(),
+    ],
 )?;
-
-    planet.owner  = ctx.accounts.buyer.key();
-    planet.listed = false;
-    planet.price  = 0;
+planet.owner  = ctx.accounts.buyer.key();
+planet.listed = false;
+planet.price  = 0;  
 
     emit!(PlanetSold {
         seller:       ctx.accounts.seller.key(),
