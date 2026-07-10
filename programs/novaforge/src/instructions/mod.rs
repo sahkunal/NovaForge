@@ -7,6 +7,7 @@ pub mod upgrade_planet;
 pub mod check_threat;
 pub mod list_planet;
 pub mod repair_planet;
-
+pub mod buy_planet;
+pub mod cancel_planet;
 
 
