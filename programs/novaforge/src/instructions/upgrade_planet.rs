@@ -45,17 +45,17 @@ pub fn handler(
 
     let level = planet.level as u64;
 
-    let iron_cost =
+    let mut iron_cost =
         UPGRADE_IRON_COST
             .checked_mul(level)
             .ok_or(NovaForgeError::OverFlow)?;
 
-    let gold_cost =
+    let mut gold_cost =
         UPGRADE_GOLD_COST
             .checked_mul(level)
             .ok_or(NovaForgeError::OverFlow)?;
 
-    let uranium_cost =
+    let mut uranium_cost =
         UPGRADE_URANIUM_COST
             .checked_mul(level)
             .ok_or(NovaForgeError::OverFlow)?;
