@@ -20,6 +20,7 @@ use instructions::{
     check_threat::CheckThreat,
     list_planet::ListPlanet,
     buy_planet::BuyPlanet,
+    cancel_listing::CancelListing,
 };
 
 declare_id!("ChpT5aE2vSinZMbgY7bpsafS9jwFVEc1jFvVi9XoB83f");
@@ -89,5 +90,11 @@ pub fn buy_planet(
     ctx: Context<BuyPlanet>,
 ) -> Result<()> {
     instructions::buy_planet::handler(ctx)
+}
+
+pub fn cancel_listing(
+    ctx: Context<CancelListing>,
+) -> Result<()> {
+    instructions::cancel_listing::handler(ctx)
 }
 }

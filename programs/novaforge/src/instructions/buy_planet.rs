@@ -85,6 +85,8 @@ invoke(
 planet.owner  = ctx.accounts.buyer.key();
 planet.listed = false;
 planet.price  = 0;  
+planet.colonized = false;
+planet.last_claim_ts = Clock::get()?.unix_timestamp;
 
     emit!(PlanetSold {
         seller:       ctx.accounts.seller.key(),
