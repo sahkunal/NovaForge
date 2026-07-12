@@ -10,4 +10,22 @@ check_threat
 list_planet
 buy_planet
 cancel_listing
+
+
 State
+Planet account updated with:
+threat_level
+inactive
+listed
+price
+
+Events
+
+Added:
+ResourcesClaimed
+MilitaryUpgraded
+PlanetUpgraded
+PlanetRepaired
+PlanetListed
+PlanetSold
+ListingCancelled
