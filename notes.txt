@@ -1,0 +1,13 @@
+Added instruction modules:
+initialize_planet
+colonize_planet
+uncolonize_planet
+claim_resources
+upgrade_planet
+upgrade_military
+repair_planet
+check_threat
+list_planet
+buy_planet
+cancel_listing
+State

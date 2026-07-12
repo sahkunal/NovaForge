@@ -21,8 +21,8 @@ custom-panic = []
 
 
 [dependencies]
-anchor-lang = "1.1.2"
-anchor-spl = "1.1.2"
+anchor-lang = "0.31.1"
+anchor-spl = "0.31.1"
 shared = { path = "../../shared" }
 
 
