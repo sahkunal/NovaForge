@@ -29,3 +29,9 @@ PlanetRepaired
 PlanetListed
 PlanetSold
 ListingCancelled
+
+
+Current Issues
+anchor build fails due to platform-tools v1.43 (rustc 1.79) pulling crates requiring Edition 2024.
+Earlier unresolved import crate at #[program] remains to be revisited after the build environment is fixed.
+buy_planet transfer CPI has a type mismatch in Anchor 1.1.2, but this is no longer relevant after reverting to Anchor 0.31.1.
