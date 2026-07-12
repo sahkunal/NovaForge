@@ -1,4 +1,5 @@
 use anchor_lang::prelude::*;
+use shared::{PlanetType, Rarity};
 
 pub mod state;
 pub mod errors;
@@ -6,20 +7,9 @@ pub mod events;
 pub mod utils;
 pub mod instructions;
 
-use shared::{PlanetType, Rarity};
-use instructions::initialize_planet::InitializePlanet;
-use instructions::colonize_planet::ColonizePlanet;
-use instructions::uncolonize_planet::UncolonizePlanet;
-use instructions::claim_resources::ClaimResources;
-use instructions::upgrade_military::UpgradeMilitary;
-use instructions::upgrade_planet::UpgradePlanet;
-use instructions::repair_planet::RepairPlanet;
-use instructions::check_threat::CheckThreat;
-use instructions::list_planet::ListPlanet;
-use instructions::buy_planet::BuyPlanet;
-use instructions::cancel_listing::CancelListing;
+use instructions::*;
 
-declare_id!("ChpT5aE2vSinZMbgY7bpsafS9jwFVEc1jFvVi9XoB83f");
+declare_id!("9BoQLMAxw2xbgXp5mNdVmnErcQmi7ZKZXPqfq9VLuK3P");
 
 #[program]
 pub mod novaforge {

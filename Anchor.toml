@@ -8,7 +8,10 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-novaforge = "ChpT5aE2vSinZMbgY7bpsafS9jwFVEc1jFvVi9XoB83f"
+novaforge = "9BoQLMAxw2xbgXp5mNdVmnErcQmi7ZKZXPqfq9VLuK3P"
+
+[registry]
+url = "https://api.apr.dev"
 
 [provider]
 cluster = "localnet"
@@ -16,5 +19,3 @@ wallet = "~/.config/solana/id.json"
 
 [scripts]
 test = "cargo test"
-
-[hooks]
