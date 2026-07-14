@@ -1,19 +1,36 @@
-
-⬡ NovaForge
-
+# ⬡ NovaForge
 
 Solana on-chain idle strategy — Planet NFTs as productive assets.
 
+## What's built so far
 
+**Program (Anchor + MPL-Core)**
+- `initialize_planet` — mint a planet NFT via MPL-Core
+- `colonize_planet` / `uncolonize_planet` — start/stop resource generation
+- `claim_resources` — collect Iron, Gold, Uranium with lazy Void Swarm monster evaluation
+- `upgrade_planet` — consume resources to level up
+- `upgrade_military` — boost defense against monster attacks
+- `repair_planet` — restore inactive planet after Warlord attack
+- `list_planet` — list on marketplace, freeze NFT via MPL-Core FreezeDelegate plugin
+- `buy_planet` — transfer SOL (99% seller, 1% treasury) + transfer NFT via MPL-Core
+- `cancel_listing` — unfreeze and return NFT to seller
 
+**Shared crate**
+- `PlanetType` — Mining, Energy, Luxury, Research, Military
+- `Rarity` — Common, Rare, Epic, Legendary
+- `MonsterType` — Rock Golem, Space Pirates, Alien Swarm, Plasma Wraith, Void Titan
+- All game constants
 
-What is NovaForge?
+**Monster system**
+- Threat level rises with time unclaimed (0–100)
+- Scout / Raider / Warlord tiers based on hours elapsed
+- Planet-type specific monsters with unique loot behavior
+- Military planets get -20 threat reduction
 
-NovaForge is a Solana dApp where Planet NFTs are productive assets. You mint a planet, colonize it, generate resources over time, upgrade it, defend it against monsters, and trade it on the marketplace. Everything — balances, ownership, monster attacks, upgrades — lives on-chain. The frontend only visualizes state.
+## Stack
+- Solana + Anchor 1.1.2
+- Metaplex MPL-Core 0.11.2
+- Rust 1.85.0
 
-Core loop:
-
-Mint → Colonize → Generate Resources → Claim → Upgrade → Defend → Sell
-
-
-{under development}
+## Status
+`{under active development}`
