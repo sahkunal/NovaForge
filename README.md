@@ -1,6 +1,8 @@
 # ⬡ NovaForge
 
 Solana on-chain idle strategy — Planet NFTs as productive assets.
+ — an on-chain idle strategy game on Solana where Planet NFTs are productive assets.
+ Mint a planet → Colonize → Generate Iron, Gold & Uranium → Claim → Upgrade → Sell
 
 ## What's built so far
 
