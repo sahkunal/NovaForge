@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use anchor_lang::solana_program::program::invoke;
 use mpl_core::instructions::AddPluginV1;
 use mpl_core::instructions::AddPluginV1InstructionArgs;
-use mpl_core::types::{FreezeDelegate, Plugin, PluginAuthority, PluginAuthorityPair};
+use mpl_core::types::{FreezeDelegate, Plugin, PluginAuthority};
 
 use crate::{
     errors::NovaForgeError,
