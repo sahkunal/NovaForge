@@ -6,6 +6,8 @@ package_manager = "yarn"
 [features]
 resolution = true
 skip-lint = false
+idl-build = false
+
 
 [programs.localnet]
 novaforge = "9BoQLMAxw2xbgXp5mNdVmnErcQmi7ZKZXPqfq9VLuK3P"

@@ -3,7 +3,6 @@ use anchor_lang::solana_program::{
     program::invoke,
     system_instruction,
 };
-
 use crate::{
     state::Planet,
     events::PlanetSold,

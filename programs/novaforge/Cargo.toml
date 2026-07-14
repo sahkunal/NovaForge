@@ -23,6 +23,7 @@ custom-panic = []
 [dependencies]
 anchor-lang = "0.31.1"
 anchor-spl = "0.31.1"
+#mpl-core = { version = "0.12.1", features = ["cpi"] }
 shared = { path = "../../shared" }
 
 
