@@ -28,8 +28,8 @@ Solana on-chain idle strategy — Planet NFTs as productive assets.
 - Military planets get -20 threat reduction
 
 ## Stack
-- Solana + Anchor 1.1.2
-- Metaplex MPL-Core 0.11.2
+- Solana + Anchor 0.31.1
+- Metaplex MPL-Core 0.11.1
 - Rust 1.85.0
 
 ## Status
