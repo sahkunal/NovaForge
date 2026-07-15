@@ -36,7 +36,6 @@ fn initialize_planet(
     let (planet_pda, _) = find_planet_pda(&asset.pubkey());
     let prog_id = Pubkey::from(novaforge::ID.to_bytes());
 
-    // build instruction data: discriminator + borsh args
     let mut data = discriminator("initialize_planet").to_vec();
     planet_type.serialize(&mut data).unwrap();
     rarity.serialize(&mut data).unwrap();
@@ -86,7 +85,6 @@ fn test_initialize_planet_mining() {
     );
 
     let account = svm.get_account(&planet_pda.to_bytes().into()).unwrap();
-    // skip 8-byte anchor discriminator then borsh decode
     let planet: novaforge::state::Planet =
         borsh::BorshDeserialize::deserialize(&mut &account.data[8..])
         .unwrap();
