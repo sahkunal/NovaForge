@@ -2554,9 +2554,8 @@ dependencies = [
 name = "novaforge-tests"
 version = "0.1.0"
 dependencies = [
- "anchor-lang",
+ "borsh 0.10.4",
  "litesvm 0.10.0",
- "mpl-core",
  "novaforge",
  "shared",
  "solana-instruction 3.4.0",
