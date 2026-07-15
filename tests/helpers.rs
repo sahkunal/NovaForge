@@ -6,7 +6,7 @@ use solana_signer::Signer;
 pub fn setup_svm() -> LiteSVM {
     let mut svm = LiteSVM::new();
     svm.add_program_from_file(
-        novaforge::ID.to_bytes().into(),
+        novaforge::ID.to_bytes(),
         "../target/deploy/novaforge.so",
     )
     .expect("failed to load novaforge.so — run anchor build --no-idl first");
