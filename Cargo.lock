@@ -2554,14 +2554,19 @@ dependencies = [
 name = "novaforge-tests"
 version = "0.1.0"
 dependencies = [
+ "anchor-lang",
  "borsh 0.10.4",
  "litesvm 0.10.0",
+ "mpl-core",
  "novaforge",
  "shared",
+ "solana-address 2.6.1",
+ "solana-clock 3.1.1",
  "solana-instruction 3.4.0",
  "solana-keypair 3.1.2",
  "solana-message 3.1.0",
  "solana-pubkey 4.2.0",
+ "solana-sha256-hasher 3.1.0",
  "solana-signer 3.0.1",
  "solana-transaction 3.1.0",
 ]

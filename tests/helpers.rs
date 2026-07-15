@@ -9,7 +9,7 @@ pub fn setup_svm() -> LiteSVM {
         novaforge::ID.to_bytes(),
         "../target/deploy/novaforge.so",
     )
-    .expect("failed to load novaforge.so — run anchor build --no-idl first");
+    .expect("failed to load novaforge.so");
     svm
 }
 
@@ -18,7 +18,7 @@ pub fn fund(svm: &mut LiteSVM, pubkey: &Pubkey, lamports: u64) {
 }
 
 pub fn warp_time(svm: &mut LiteSVM, seconds: i64) {
-    let mut clock = svm.get_sysvar::<anchor_lang::prelude::Clock>();
+    let mut clock = svm.get_sysvar::<solana_clock::Clock>();
     clock.unix_timestamp += seconds;
     svm.set_sysvar(&clock);
 }
