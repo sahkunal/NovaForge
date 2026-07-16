@@ -1,8 +1,8 @@
 use anchor_lang::prelude::*;
-use crate::utils::apply_damage;
+use crate::utils::{spawn_monster, resolve_combat, CombatResult};
+use crate::events::{ResourcesClaimed, MonsterSlain};
 use crate::{
     errors::NovaForgeError,
-    events::ResourcesClaimed,
     state::Planet,
 };
 use shared::{
@@ -23,8 +23,7 @@ pub struct ClaimResources<'info> {
 }
 
 pub fn handler(ctx: Context<ClaimResources>) -> Result<()> {
-    let planet = &mut ctx.accounts.planet;
-
+let planet = &mut ctx.accounts.planet;
     require!(planet.colonized, NovaForgeError::PlanetNotColonized);
     require!(!planet.inactive, NovaForgeError::PlanetInactive);
 
@@ -51,12 +50,12 @@ if effective_threat >= 50 && planet.monster_power == 0 {
         75..=89  => 2,
         _        => 1,
     };
-    spawn_monster(planet, tier);
+    spawn_monster(&mut *planet, tier);
 }
 
 // resolve combat if monster active
 if planet.monster_power > 0 {
-    let result = resolve_combat(planet, now)?;
+    let result = resolve_combat(&mut *planet, now)?;
 
     match result {
         CombatResult::PlanetDefeated => {

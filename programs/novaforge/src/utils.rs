@@ -1,6 +1,8 @@
 use anchor_lang::prelude::*;
+use anchor_lang::prelude::Account;
 use crate::state::Planet;
 use shared::PlanetType;
+use shared::constants::*;
 
 
 pub fn calculate_resources(
@@ -26,8 +28,7 @@ pub fn upgrade_cost(
 }
 
 // Called when threat_level crosses 50 — spawns the monster
-pub fn spawn_monster(planet: &mut Planet, tier: u8) {
-    // only spawn if no active monster
+pub fn spawn_monster(planet: &mut Account<'_, Planet>, tier: u8) {    // only spawn if no active monster
     if planet.monster_power > 0 {
         return;
     }
@@ -41,7 +42,7 @@ pub fn spawn_monster(planet: &mut Planet, tier: u8) {
 }
 
 // Called every claim while monster is active
-pub fn resolve_combat(planet: &mut Planet, now: i64) -> Result<CombatResult> {
+pub fn resolve_combat(planet: &mut Account<'_, Planet>, now: i64) -> Result<CombatResult> {
     if planet.monster_power == 0 {
         return Ok(CombatResult::NoCombat);
     }
@@ -79,7 +80,7 @@ pub enum CombatResult {
     PlanetDefeated,
 }
 
-fn apply_kill_reward(planet: &mut Planet, tier: u8, now: i64) {
+fn apply_kill_reward(planet: &mut Account<'_, Planet>, tier: u8, now: i64) {
     planet.monsters_killed    += 1;
     planet.last_monster_kill   = now;
 
@@ -111,7 +112,7 @@ fn apply_kill_reward(planet: &mut Planet, tier: u8, now: i64) {
     }
 }
 
-fn apply_monster_victory(planet: &mut Planet) {
+fn apply_monster_victory(planet: &mut Account<'_, Planet>) {
     match planet.monster_tier {
         1 => {
             // Scout wins — 25% primary resource loot

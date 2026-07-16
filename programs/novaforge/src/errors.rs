@@ -44,4 +44,7 @@ pub enum NovaForgeError {
 
     #[msg("cant buy own planet")]
     CannotBuyOwnPlanet,
+
+    #[msg("No active monster to resolve")]
+NoActiveMonster,
 }
