@@ -44,3 +44,17 @@ pub const REPAIR_GOLD_COST:    u64 = 50;
 pub const REPAIR_URANIUM_COST: u64 = 25;
 
 pub const MILITARY_POWER_PER_LEVEL: u32 = 50;
+
+pub const MONSTER_POWER_SCOUT:   u32 = 100;
+pub const MONSTER_POWER_RAIDER:  u32 = 300;
+pub const MONSTER_POWER_WARLORD: u32 = 800;
+
+pub const MONSTER_DAMAGE_PER_CLAIM: u32 = 10;  
+pub const DEFENSE_DAMAGE_PER_CLAIM: u32 = 10; 
+
+pub const KILL_BONUS_SCOUT_RESOURCES:   u64 = 50;
+pub const KILL_BONUS_RAIDER_RESOURCES:  u64 = 150;
+pub const KILL_BONUS_WARLORD_MILITARY:  u32 = 25;  
+pub const PRODUCTION_BOOST_SCOUT:       u8  = 10;  
+pub const PRODUCTION_BOOST_RAIDER:      u8  = 20;
+pub const PRODUCTION_BOOST_DURATION:    i64 = 24 * 3600;
