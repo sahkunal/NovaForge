@@ -40,4 +40,13 @@ pub struct Planet {
     pub listed: bool,
     pub price: u64,
 
+    pub monster_power:       u32,  
+    pub monster_tier:        u8,   
+    pub monsters_killed:     u32,  
+    pub last_monster_kill:   i64,   
+
+    pub production_boost:    u8,   
+    pub boost_expiry:        i64,  
+
+
 }
