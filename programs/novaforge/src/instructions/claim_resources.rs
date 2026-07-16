@@ -44,31 +44,49 @@ pub fn handler(ctx: Context<ClaimResources>) -> Result<()> {
         _ => planet.threat_level,
     };
 
-    if effective_threat >= 50 {
-        let tier = match effective_threat {
-            90..=100 => 3u8, // Warlord
-            75..=89  => 2,   // Raider
-            _        => 1,   // Scout
-        };
-        apply_damage(planet, tier)?;
+    // spawn monster if threshold crossed
+if effective_threat >= 50 && planet.monster_power == 0 {
+    let tier = match effective_threat {
+        90..=100 => 3u8,
+        75..=89  => 2,
+        _        => 1,
+    };
+    spawn_monster(planet, tier);
+}
 
-        if tier == 3 {
-            planet.inactive      = true;
-            planet.threat_level  = 100;
-            planet.last_claim_ts = now;
-            emit!(ResourcesClaimed {
-                owner:        planet.owner,
-                planet:        planet.asset,
-                iron_claimed:         0,
-                gold_claimed:         0,
-                uranium_claimed:      0,
-                threat_level: planet.threat_level,
-                timestamp:    now,
-            });
-            return Ok(());
+// resolve combat if monster active
+if planet.monster_power > 0 {
+    let result = resolve_combat(planet, now)?;
+
+    match result {
+        CombatResult::PlanetDefeated => {
+            if planet.inactive {
+                planet.last_claim_ts = now;
+                planet.threat_level  = 100;
+                emit!(ResourcesClaimed {
+                    owner:           planet.owner,
+                    planet:          planet.asset,
+                    iron_claimed:    0,
+                    gold_claimed:    0,
+                    uranium_claimed: 0,
+                    threat_level:    planet.threat_level,
+                    timestamp:       now,
+                });
+                return Ok(());
+            }
         }
+        CombatResult::MonsterKilled => {
+            emit!(MonsterSlain {
+                owner:           planet.owner,
+                planet:          planet.asset,
+                monster_tier:    planet.monster_tier,
+                monsters_killed: planet.monsters_killed,
+                timestamp:       now,
+            });
+        }
+        _ => {}
     }
-
+}
     let base = planet
         .production_rate
         .checked_mul(elapsed)

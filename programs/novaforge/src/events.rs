@@ -82,3 +82,22 @@ pub struct PlanetRepaired {
     pub uranium_spent: u64,
     pub timestamp:     i64,
 }
+
+#[event]
+pub struct MonsterSlain {
+    pub owner:           Pubkey,
+    pub planet:          Pubkey,
+    pub monster_tier:    u8,
+    pub monsters_killed: u32,
+    pub timestamp:       i64,
+}
+
+#[event]
+pub struct MonsterAttacking {
+    pub owner:          Pubkey,
+    pub planet:         Pubkey,
+    pub monster_tier:   u8,
+    pub monster_power:  u32,
+    pub defense_power:  u32,
+    pub timestamp:      i64,
+}
