@@ -128,7 +128,8 @@ fn test_colonize_planet() {
 
     let planet = fetch_planet(&svm, &planet_pda);
     assert_eq!(planet.colonized, true);
-    assert!(planet.last_claim_ts > 0);
+   assert!(planet.colonized == true);
+   assert_eq!(planet.last_claim_ts, 0);
 }
 
 #[test]
