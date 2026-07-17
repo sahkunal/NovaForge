@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-
+use shared::{PlanetType, constants::*};
 use crate::{
     state::Planet,
     events::PlanetUncolonized,

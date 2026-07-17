@@ -192,7 +192,7 @@ fn test_uncolonize_flushes_rewards() {
     let (planet_pda, _) = initialize_planet(&mut svm, &owner, PlanetType::Mining, Rarity::Common);
     colonize_planet(&mut svm, &owner, &planet_pda);
 
-    warp_time(&mut svm, 3_600); // 1 hour
+    warp_time(&mut svm, 7_200); 
 
     // uncolonize
     let mut data = discriminator("uncolonize_planet").to_vec();
@@ -215,5 +215,5 @@ fn test_uncolonize_flushes_rewards() {
 
     let planet = fetch_planet(&svm, &planet_pda);
     assert_eq!(planet.colonized, false);
-    assert!(planet.iron_balance > 0, "rewards should be flushed on uncolonize");
+assert!(planet.iron_balance > 0, "rewards should be flushed on uncolonize");
 }
