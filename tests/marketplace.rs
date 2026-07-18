@@ -39,7 +39,7 @@ fn initialize_planet(
     owner: &Keypair,
     planet_type: PlanetType,
     rarity: Rarity,
-) -> (Pubkey, Pubkey) {
+) -> (Pubkey, Keypair) {
     let asset = Keypair::new();
     let (planet_pda, _) = find_planet_pda(&asset.pubkey());
 
@@ -70,7 +70,8 @@ fn initialize_planet(
         blockhash,
     );
     svm.send_transaction(tx).expect("initialize_planet failed");
-    (planet_pda, asset.pubkey())
+    create_mpl_core_asset(svm, owner, &asset);
+    (planet_pda, asset)
 }
 
 fn list_planet(svm: &mut LiteSVM, owner: &Keypair, planet_pda: &Pubkey, price: u64) {
