@@ -74,7 +74,7 @@ fn initialize_planet(
     (planet_pda, asset)
 }
 
-fn list_planet(svm: &mut LiteSVM, owner: &Keypair, planet_pda: &Pubkey, price: u64) {
+fn list_planet(svm: &mut LiteSVM, owner: &Keypair, planet_pda: &Pubkey, asset: &Keypair, price: u64) {
     let mut data = discriminator("list_planet").to_vec();
     price.serialize(&mut data).unwrap();
 
@@ -107,7 +107,7 @@ fn list_planet(svm: &mut LiteSVM, owner: &Keypair, planet_pda: &Pubkey, price: u
     svm.send_transaction(tx).expect("list_planet failed");
 }
 
-fn cancel_listing(svm: &mut LiteSVM, owner: &Keypair, planet_pda: &Pubkey) {
+fn cancel_listing(svm: &mut LiteSVM, owner: &Keypair, planet_pda: &Pubkey,asset: &Keypair) {
     let data = discriminator("cancel_listing").to_vec();
     let planet = fetch_planet(svm, planet_pda);
     let asset = Pubkey::from(planet.asset.to_bytes());
@@ -142,10 +142,12 @@ fn test_list_planet() {
     let mut svm = setup_svm();
     let owner = new_funded_keypair(&mut svm);
 
-    let (planet_pda, _) = initialize_planet(&mut svm, &owner, PlanetType::Luxury, Rarity::Rare);
+    let (planet_pda, asset) = initialize_planet(&mut svm, &owner, PlanetType::Luxury, Rarity::Rare);
+    let price = 1_000_000_000u64;
+    list_planet(&mut svm, &owner, &planet_pda, &asset, price);
 
     let price = 1_000_000_000u64; // 1 SOL
-    list_planet(&mut svm, &owner, &planet_pda, price);
+    list_planet(&mut svm, &owner, &planet_pda, &asset, price);
 
     let planet = fetch_planet(&svm, &planet_pda);
     assert_eq!(planet.listed, true);
@@ -158,8 +160,8 @@ fn test_cancel_listing() {
     let owner = new_funded_keypair(&mut svm);
 
     let (planet_pda, asset) = initialize_planet(&mut svm, &owner, PlanetType::Luxury, Rarity::Rare);
-    list_planet(&mut svm, &owner, &planet_pda, 1_000_000_000);
-    cancel_listing(&mut svm, &owner, &planet_pda);
+    list_planet(&mut svm, &owner, &planet_pda, &asset, 1_000_000_000);
+    cancel_listing(&mut svm, &owner, &planet_pda, &asset);
 
     let planet = fetch_planet(&svm, &planet_pda);
     assert_eq!(planet.listed, false);
@@ -225,7 +227,7 @@ fn test_buy_planet_fee_split() {
 
     let (planet_pda, asset) = initialize_planet(&mut svm, &seller, PlanetType::Luxury, Rarity::Rare);
     let price = 2_000_000_000u64; // 2 SOL
-    list_planet(&mut svm, &seller, &planet_pda, price);
+    list_planet(&mut svm, &seller, &planet_pda, &asset, price);
 
     let seller_balance_before = svm.get_account(
         &seller.pubkey().to_bytes().into()
