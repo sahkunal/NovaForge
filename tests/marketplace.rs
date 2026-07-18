@@ -169,7 +169,7 @@ fn test_cancel_listing() {
 fn test_cannot_list_colonized_planet() {
     let mut svm = setup_svm();
     let owner = new_funded_keypair(&mut svm);
-
+    let owner_pk = owner.pubkey();
     let (planet_pda, _) = initialize_planet(&mut svm, &owner, PlanetType::Mining, Rarity::Common);
 
     // colonize first
@@ -177,14 +177,14 @@ fn test_cannot_list_colonized_planet() {
     let ix = Instruction {
         program_id: prog_id().to_bytes().into(),
         accounts: vec![
-            AccountMeta::new(owner.pubkey().to_bytes().into(), true),
+            AccountMeta::new(owner_pk.to_bytes().into(), true),
             AccountMeta::new(planet_pda.to_bytes().into(), false),
         ],
         data,
     };
     let blockhash = svm.latest_blockhash();
     let tx = Transaction::new_signed_with_payer(
-        &[ix], Some(&owner.pubkey().to_bytes().into()), &[owner], blockhash,
+    &[ix], Some(&owner_pk), &[&owner], blockhash,
     );
     svm.send_transaction(tx).unwrap();
 
@@ -199,7 +199,7 @@ fn test_cannot_list_colonized_planet() {
     let ix = Instruction {
         program_id: prog_id().to_bytes().into(),
         accounts: vec![
-            AccountMeta::new(owner.pubkey().to_bytes().into(), true),
+            AccountMeta::new(owner_pk.to_bytes().into(), true),
             AccountMeta::new(planet_pda.to_bytes().into(), false),
             AccountMeta::new(asset.to_bytes().into(), false),
             AccountMeta::new_readonly(mpl_core_id.to_bytes().into(), false),
@@ -209,7 +209,7 @@ fn test_cannot_list_colonized_planet() {
     };
     let blockhash = svm.latest_blockhash();
     let tx = Transaction::new_signed_with_payer(
-        &[ix], Some(&owner.pubkey().to_bytes().into()), &[owner], blockhash,
+        &[ix], Some(&owner_pk.to_bytes().into()), &[&owner], blockhash,
     );
     let result = svm.send_transaction(tx);
     assert!(result.is_err(), "listing colonized planet should fail");
@@ -250,13 +250,13 @@ fn test_buy_planet_fee_split() {
     };
     let blockhash = svm.latest_blockhash();
     let tx = Transaction::new_signed_with_payer(
-        &[ix], Some(&buyer.pubkey().to_bytes().into()), &[buyer], blockhash,
+        &[ix], Some(&buyer.pubkey().to_bytes().into()), &[&buyer], blockhash,
     );
     svm.send_transaction(tx).expect("buy_planet failed");
 
     let planet = fetch_planet(&svm, &planet_pda);
     assert_eq!(planet.listed, false);
-    assert_eq!(planet.owner, seller.pubkey());  // planet.owner is still anchor Pubkey
+    assert_eq!(planet.owner.to_bytes(), seller.pubkey().to_bytes());
 
     let seller_balance_after = svm.get_account(
         &seller.pubkey().to_bytes().into()

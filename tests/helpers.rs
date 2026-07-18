@@ -3,7 +3,7 @@ use solana_keypair::Keypair;
 use solana_pubkey::Pubkey;
 use solana_signer::Signer;
 
-pub fn setup_svm() -> LiteSVM {
+/*pub fn setup_svm() -> LiteSVM {
     let mut svm = LiteSVM::new();
     svm.add_program_from_file(
         novaforge::ID.to_bytes(),
@@ -11,7 +11,7 @@ pub fn setup_svm() -> LiteSVM {
     )
     .expect("failed to load novaforge.so");
     svm
-}
+}*/
 
 pub fn fund(svm: &mut LiteSVM, pubkey: &Pubkey, lamports: u64) {
     svm.airdrop(pubkey, lamports).unwrap();
@@ -27,4 +27,25 @@ pub fn new_funded_keypair(svm: &mut LiteSVM) -> Keypair {
     let kp = Keypair::new();
     fund(svm, &kp.pubkey(), 10_000_000_000);
     kp
+}
+
+pub fn setup_svm() -> LiteSVM {
+    let mut svm = LiteSVM::new();
+    svm.add_program_from_file(
+        novaforge::ID.to_bytes(),
+        "../target/deploy/novaforge.so",
+    )
+    .expect("failed to load novaforge.so");
+
+    // load MPL-Core program
+    svm.add_program_from_file(
+        "CoREENxT6tW1HoK8ypY1SxRMZTcVPm7R94rH4PZNhX7d"
+            .parse::<Pubkey>()
+            .unwrap()
+            .to_bytes(),
+        "../target/deploy/mpl_core.so",
+    )
+    .expect("failed to load mpl_core.so");
+
+    svm
 }
