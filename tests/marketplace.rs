@@ -157,7 +157,7 @@ fn test_cancel_listing() {
     let mut svm = setup_svm();
     let owner = new_funded_keypair(&mut svm);
 
-    let (planet_pda, _) = initialize_planet(&mut svm, &owner, PlanetType::Luxury, Rarity::Rare);
+    let (planet_pda, asset) = initialize_planet(&mut svm, &owner, PlanetType::Luxury, Rarity::Rare);
     list_planet(&mut svm, &owner, &planet_pda, 1_000_000_000);
     cancel_listing(&mut svm, &owner, &planet_pda);
 
@@ -171,7 +171,7 @@ fn test_cannot_list_colonized_planet() {
     let mut svm = setup_svm();
     let owner = new_funded_keypair(&mut svm);
     let owner_pk = owner.pubkey();
-    let (planet_pda, _) = initialize_planet(&mut svm, &owner, PlanetType::Mining, Rarity::Common);
+    let (planet_pda, asset) = initialize_planet(&mut svm, &owner, PlanetType::Mining, Rarity::Common);
 
     // colonize first
     let data = discriminator("colonize_planet").to_vec();
@@ -223,7 +223,7 @@ fn test_buy_planet_fee_split() {
     let buyer  = new_funded_keypair(&mut svm);
     let treasury: Pubkey = "11111111111111111111111111111111".parse().unwrap();
 
-    let (planet_pda, _) = initialize_planet(&mut svm, &seller, PlanetType::Luxury, Rarity::Rare);
+    let (planet_pda, asset) = initialize_planet(&mut svm, &seller, PlanetType::Luxury, Rarity::Rare);
     let price = 2_000_000_000u64; // 2 SOL
     list_planet(&mut svm, &seller, &planet_pda, price);
 
