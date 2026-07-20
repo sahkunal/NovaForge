@@ -29,6 +29,10 @@ fn prog_id() -> Pubkey {
     Pubkey::from(novaforge::ID.to_bytes())
 }
 
+fn mpl_core_id() -> Pubkey {
+    "CoREENxT6tW1HoK8ypY1SxRMZTcVPm7R94rH4PZNhX7d".parse().unwrap()
+}
+
 fn fetch_planet(svm: &LiteSVM, planet_pda: &Pubkey) -> novaforge::state::Planet {
     let account = svm.get_account(&planet_pda.to_bytes().into()).unwrap();
     borsh::BorshDeserialize::deserialize(&mut &account.data[8..]).unwrap()
@@ -47,16 +51,13 @@ fn initialize_planet(
     planet_type.serialize(&mut data).unwrap();
     rarity.serialize(&mut data).unwrap();
 
-    let mpl_core_id: Pubkey = "CoREENxT6tW1HoK8ypY1SxRMZTcVPm7R94rH4PZNhX7d"
-        .parse().unwrap();
-
     let ix = Instruction {
         program_id: prog_id().to_bytes().into(),
         accounts: vec![
             AccountMeta::new(owner.pubkey().to_bytes().into(), true),
             AccountMeta::new(planet_pda.to_bytes().into(), false),
             AccountMeta::new(asset.pubkey().to_bytes().into(), false),
-            AccountMeta::new_readonly(mpl_core_id.to_bytes().into(), false),
+            AccountMeta::new_readonly(mpl_core_id().to_bytes().into(), false),
             AccountMeta::new_readonly(Pubkey::default().to_bytes().into(), false),
         ],
         data,
@@ -78,20 +79,13 @@ fn list_planet(svm: &mut LiteSVM, owner: &Keypair, planet_pda: &Pubkey, asset: &
     let mut data = discriminator("list_planet").to_vec();
     price.serialize(&mut data).unwrap();
 
-    let mpl_core_id: Pubkey = "CoREENxT6tW1HoK8ypY1SxRMZTcVPm7R94rH4PZNhX7d"
-        .parse().unwrap();
-
-    // need asset pubkey — get from planet PDA
-    let planet = fetch_planet(svm, planet_pda);
-    let asset = Pubkey::from(planet.asset.to_bytes());
-
     let ix = Instruction {
         program_id: prog_id().to_bytes().into(),
         accounts: vec![
             AccountMeta::new(owner.pubkey().to_bytes().into(), true),
             AccountMeta::new(planet_pda.to_bytes().into(), false),
-            AccountMeta::new(asset.to_bytes().into(), false),
-            AccountMeta::new_readonly(mpl_core_id.to_bytes().into(), false),
+            AccountMeta::new(asset.pubkey().to_bytes().into(), false),
+            AccountMeta::new_readonly(mpl_core_id().to_bytes().into(), false),
             AccountMeta::new_readonly(Pubkey::default().to_bytes().into(), false),
         ],
         data,
@@ -107,21 +101,16 @@ fn list_planet(svm: &mut LiteSVM, owner: &Keypair, planet_pda: &Pubkey, asset: &
     svm.send_transaction(tx).expect("list_planet failed");
 }
 
-fn cancel_listing(svm: &mut LiteSVM, owner: &Keypair, planet_pda: &Pubkey,asset: &Keypair) {
+fn cancel_listing(svm: &mut LiteSVM, owner: &Keypair, planet_pda: &Pubkey, asset: &Keypair) {
     let data = discriminator("cancel_listing").to_vec();
-    let planet = fetch_planet(svm, planet_pda);
-    let asset = Pubkey::from(planet.asset.to_bytes());
-
-    let mpl_core_id: Pubkey = "CoREENxT6tW1HoK8ypY1SxRMZTcVPm7R94rH4PZNhX7d"
-        .parse().unwrap();
 
     let ix = Instruction {
         program_id: prog_id().to_bytes().into(),
         accounts: vec![
             AccountMeta::new(owner.pubkey().to_bytes().into(), true),
             AccountMeta::new(planet_pda.to_bytes().into(), false),
-            AccountMeta::new(asset.to_bytes().into(), false),
-            AccountMeta::new_readonly(mpl_core_id.to_bytes().into(), false),
+            AccountMeta::new(asset.pubkey().to_bytes().into(), false),
+            AccountMeta::new_readonly(mpl_core_id().to_bytes().into(), false),
             AccountMeta::new_readonly(Pubkey::default().to_bytes().into(), false),
         ],
         data,
@@ -143,10 +132,9 @@ fn test_list_planet() {
     let owner = new_funded_keypair(&mut svm);
 
     let (planet_pda, asset) = initialize_planet(&mut svm, &owner, PlanetType::Luxury, Rarity::Rare);
-    let price = 1_000_000_000u64;
-    list_planet(&mut svm, &owner, &planet_pda, &asset, price);
+    svm.expire_blockhash();
 
-    let price = 1_000_000_000u64; // 1 SOL
+    let price = 1_000_000_000u64;
     list_planet(&mut svm, &owner, &planet_pda, &asset, price);
 
     let planet = fetch_planet(&svm, &planet_pda);
@@ -160,7 +148,9 @@ fn test_cancel_listing() {
     let owner = new_funded_keypair(&mut svm);
 
     let (planet_pda, asset) = initialize_planet(&mut svm, &owner, PlanetType::Luxury, Rarity::Rare);
+    svm.expire_blockhash();
     list_planet(&mut svm, &owner, &planet_pda, &asset, 1_000_000_000);
+    svm.expire_blockhash();
     cancel_listing(&mut svm, &owner, &planet_pda, &asset);
 
     let planet = fetch_planet(&svm, &planet_pda);
@@ -174,8 +164,8 @@ fn test_cannot_list_colonized_planet() {
     let owner = new_funded_keypair(&mut svm);
     let owner_pk = owner.pubkey();
     let (planet_pda, asset) = initialize_planet(&mut svm, &owner, PlanetType::Mining, Rarity::Common);
+    svm.expire_blockhash();
 
-    // colonize first
     let data = discriminator("colonize_planet").to_vec();
     let ix = Instruction {
         program_id: prog_id().to_bytes().into(),
@@ -187,25 +177,21 @@ fn test_cannot_list_colonized_planet() {
     };
     let blockhash = svm.latest_blockhash();
     let tx = Transaction::new_signed_with_payer(
-    &[ix], Some(&owner_pk), &[&owner], blockhash,
+        &[ix], Some(&owner_pk), &[&owner], blockhash,
     );
     svm.send_transaction(tx).unwrap();
+    svm.expire_blockhash();
 
-    // listing should fail
     let mut data = discriminator("list_planet").to_vec();
     1_000_000_000u64.serialize(&mut data).unwrap();
-
-    let planet = fetch_planet(&svm, &planet_pda);
-    let asset = Pubkey::from(planet.asset.to_bytes());
-    let mpl_core_id: Pubkey = "CoREENxT6tW1HoK8ypY1SxRMZTcVPm7R94rH4PZNhX7d".parse().unwrap();
 
     let ix = Instruction {
         program_id: prog_id().to_bytes().into(),
         accounts: vec![
             AccountMeta::new(owner_pk.to_bytes().into(), true),
             AccountMeta::new(planet_pda.to_bytes().into(), false),
-            AccountMeta::new(asset.to_bytes().into(), false),
-            AccountMeta::new_readonly(mpl_core_id.to_bytes().into(), false),
+            AccountMeta::new(asset.pubkey().to_bytes().into(), false),
+            AccountMeta::new_readonly(mpl_core_id().to_bytes().into(), false),
             AccountMeta::new_readonly(Pubkey::default().to_bytes().into(), false),
         ],
         data,
@@ -221,21 +207,21 @@ fn test_cannot_list_colonized_planet() {
 #[test]
 fn test_buy_planet_fee_split() {
     let mut svm = setup_svm();
-    let seller = new_funded_keypair(&mut svm);
-    let buyer  = new_funded_keypair(&mut svm);
-    let treasury: Pubkey = "11111111111111111111111111111111".parse().unwrap();
+    let seller  = new_funded_keypair(&mut svm);
+    let buyer   = new_funded_keypair(&mut svm);
+    let treasury = Keypair::new();
+    fund(&mut svm, &treasury.pubkey(), 1_000_000);
 
     let (planet_pda, asset) = initialize_planet(&mut svm, &seller, PlanetType::Luxury, Rarity::Rare);
-    let price = 2_000_000_000u64; // 2 SOL
+    svm.expire_blockhash();
+
+    let price = 2_000_000_000u64;
     list_planet(&mut svm, &seller, &planet_pda, &asset, price);
+    svm.expire_blockhash();
 
     let seller_balance_before = svm.get_account(
         &seller.pubkey().to_bytes().into()
     ).unwrap().lamports;
-
-    let planet = fetch_planet(&svm, &planet_pda);
-    let asset = Pubkey::from(planet.asset.to_bytes());
-    let mpl_core_id: Pubkey = "CoREENxT6tW1HoK8ypY1SxRMZTcVPm7R94rH4PZNhX7d".parse().unwrap();
 
     let data = discriminator("buy_planet").to_vec();
     let ix = Instruction {
@@ -243,10 +229,10 @@ fn test_buy_planet_fee_split() {
         accounts: vec![
             AccountMeta::new(buyer.pubkey().to_bytes().into(), true),
             AccountMeta::new(seller.pubkey().to_bytes().into(), false),
-            AccountMeta::new(treasury.to_bytes().into(), false),
+            AccountMeta::new(treasury.pubkey().to_bytes().into(), false),
             AccountMeta::new(planet_pda.to_bytes().into(), false),
-            AccountMeta::new(asset.to_bytes().into(), false),
-            AccountMeta::new_readonly(mpl_core_id.to_bytes().into(), false),
+            AccountMeta::new(asset.pubkey().to_bytes().into(), false),
+            AccountMeta::new_readonly(mpl_core_id().to_bytes().into(), false),
             AccountMeta::new_readonly(Pubkey::default().to_bytes().into(), false),
         ],
         data,
@@ -265,9 +251,5 @@ fn test_buy_planet_fee_split() {
         &seller.pubkey().to_bytes().into()
     ).unwrap().lamports;
 
-    let expected_seller = price * 99 / 100;
-    assert!(
-        seller_balance_after > seller_balance_before,
-        "seller should receive SOL"
-    );
+    assert!(seller_balance_after > seller_balance_before, "seller should receive SOL");
 }
