@@ -34,5 +34,9 @@ Solana on-chain idle strategy — Planet NFTs as productive assets.
 - Metaplex MPL-Core 0.11.1
 - Rust 1.85.0
 
+## devnet deploymet
+- Program Id: GiQ6ov39xDr4HrU1gM9kVJ82e9cVJh5xYMZ8qNtsxMP9
+- Signature: 3Chkp68CT7HZiwhCwY52cv3KRny7uDRHciuyiwkE8zLvJcXBcWwwyYbeK7PU3gLQzQEZAxqKYUHRuyt59Qicp5jL
+
 ## Status
 `{under active development}`
