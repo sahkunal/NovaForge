@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use anchor_lang::solana_program::{program::invoke, system_instruction};
+use anchor_lang::solana_program::{program::invoke, system_interface};
 use mpl_core::instructions::{RemovePluginV1, RemovePluginV1InstructionArgs, TransferV1, TransferV1InstructionArgs};
 use mpl_core::types::PluginType;
 
@@ -59,7 +59,7 @@ pub fn handler(ctx: Context<BuyPlanet>) -> Result<()> {
 
     // Transfer SOL to seller
     invoke(
-        &system_instruction::transfer(
+        &system_interface::transfer(
             &ctx.accounts.buyer.key(),
             &ctx.accounts.seller.key(),
             seller_amount,
@@ -73,7 +73,7 @@ pub fn handler(ctx: Context<BuyPlanet>) -> Result<()> {
 
     // Transfer fee to treasury
     invoke(
-        &system_instruction::transfer(
+        &system_interface::transfer(
             &ctx.accounts.buyer.key(),
             &ctx.accounts.treasury.key(),
             fee,

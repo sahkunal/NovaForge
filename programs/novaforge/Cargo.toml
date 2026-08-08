@@ -27,14 +27,6 @@ mpl-core = { version = "0.11.1", features = ["anchor"] }
 shared = { path = "../../shared"}
 
 
-[dev-dependencies]
-litesvm = "0.4"
-solana-sdk = "2.1.0"
-solana-message = "3.0.1"
-solana-transaction = "3.0.2"
-solana-signer = "3.0.0"
-solana-keypair = "3.0.1"
-solana-pubkey = "4.1.0"
 
 
 [lints.rust]

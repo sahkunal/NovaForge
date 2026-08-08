@@ -9,7 +9,7 @@ pub mod instructions;
 
 use instructions::*;
 
-declare_id!("9BoQLMAxw2xbgXp5mNdVmnErcQmi7ZKZXPqfq9VLuK3P");
+declare_id!("GiQ6ov39xDr4HrU1gM9kVJ82e9cVJh5xYMZ8qNtsxMP9");
 
 #[program]
 pub mod novaforge {

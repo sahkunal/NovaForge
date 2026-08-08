@@ -6,17 +6,15 @@ package_manager = "yarn"
 [features]
 resolution = true
 skip-lint = false
-idl-build = false
 
-
-[programs.localnet]
-novaforge = "9BoQLMAxw2xbgXp5mNdVmnErcQmi7ZKZXPqfq9VLuK3P"
+[programs.devnet]
+novaforge = "GiQ6ov39xDr4HrU1gM9kVJ82e9cVJh5xYMZ8qNtsxMP9"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
