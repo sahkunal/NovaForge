@@ -1,0 +1,32 @@
+{
+  "app/dashboard/page.tsx -> @/components/StarField": {
+    "id": "app/dashboard/page.tsx -> @/components/StarField",
+    "files": [
+      "static/chunks/_app-pages-browser_components_StarField_tsx.js"
+    ]
+  },
+  "app/page.tsx -> @/components/EntryScreen": {
+    "id": "app/page.tsx -> @/components/EntryScreen",
+    "files": [
+      "static/chunks/_app-pages-browser_components_EntryScreen_tsx.js"
+    ]
+  },
+  "app/page.tsx -> @/components/SpaceMap": {
+    "id": "app/page.tsx -> @/components/SpaceMap",
+    "files": [
+      "static/chunks/_app-pages-browser_components_SpaceMap_tsx.js"
+    ]
+  },
+  "app/page.tsx -> @/components/SplashScreen": {
+    "id": "app/page.tsx -> @/components/SplashScreen",
+    "files": [
+      "static/chunks/_app-pages-browser_components_SplashScreen_tsx.js"
+    ]
+  },
+  "app/page.tsx -> @/components/StarField": {
+    "id": "app/page.tsx -> @/components/StarField",
+    "files": [
+      "static/chunks/_app-pages-browser_components_StarField_tsx.js"
+    ]
+  }
+}

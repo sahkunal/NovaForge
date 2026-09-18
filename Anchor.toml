@@ -8,7 +8,7 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-novaforge = "GiQ6ov39xDr4HrU1gM9kVJ82e9cVJh5xYMZ8qNtsxMP9"
+novaforge = "4RmfPaedo1BpddXzwASa2LU6YJ9pZ6XafwJGxRm22bsB"
 
 [registry]
 url = "https://api.apr.dev"

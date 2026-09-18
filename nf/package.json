@@ -2,17 +2,13 @@
   "name": "novaforge",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
+  "scripts": {"dev":"next dev","build":"next build","start":"next start"},
   "dependencies": {
     "next": "14.2.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "@coral-xyz/anchor": "^0.31.1",
     "@solana/web3.js": "^1.95.3",
+    "bs58": "^5.0.0",
     "lucide-react": "^0.383.0",
     "clsx": "^2.1.1"
   },

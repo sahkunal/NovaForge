@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#03020f;color:#e2e8f0;font-family:'Inter',sans-serif;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:#03020f}::-webkit-scrollbar-thumb{background:#7c3aed;border-radius:2px}
+.panel{background:rgba(12,9,32,0.88);backdrop-filter:blur(20px);border:1px solid rgba(124,58,237,0.22);border-radius:16px}
+.splash{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:#03020f}
+.resource-bar{height:4px;border-radius:2px;overflow:hidden;background:rgba(255,255,255,0.07)}
+.resource-fill{height:100%;border-radius:2px;transition:width 1.2s ease}
+.res-timer{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:#fff;letter-spacing:0.05em;line-height:1}
+.btn-primary{background:linear-gradient(135deg,#7c3aed,#5b21b6,#0f9e8a);border:1px solid rgba(124,58,237,0.5);color:#fff;border-radius:10px;padding:8px 18px;font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:0.06em;cursor:pointer;transition:all 0.25s}
+.btn-primary:hover:not(:disabled){box-shadow:0 0 25px rgba(124,58,237,0.6);transform:translateY(-2px)}
+.btn-teal{background:linear-gradient(135deg,#0f9e8a,#065f52);border:1px solid rgba(15,158,138,0.5);color:#fff;border-radius:10px;padding:8px 18px;font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:0.06em;cursor:pointer;transition:all 0.25s}
+.btn-teal:hover:not(:disabled){box-shadow:0 0 25px rgba(15,158,138,0.5);transform:translateY(-2px)}
+.btn-danger{background:linear-gradient(135deg,#dc2626,#7f1d1d);border:1px solid rgba(244,63,94,0.5);color:#fff;border-radius:10px;padding:8px 18px;font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:0.06em;cursor:pointer;transition:all 0.25s}
+.btn-danger:hover:not(:disabled){box-shadow:0 0 25px rgba(244,63,94,0.6);transform:translateY(-2px)}
+.btn-ghost{background:transparent;border:1px solid rgba(124,58,237,0.3);color:#94a3b8;border-radius:10px;padding:8px 18px;font-family:'Orbitron',monospace;font-size:11px;cursor:pointer;transition:all 0.25s}
+.btn-ghost:hover:not(:disabled){border-color:rgba(124,58,237,0.6);color:#e2e8f0}
+.btn-disabled{opacity:0.35;cursor:not-allowed;pointer-events:none}
+.nav-item{display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:12px;color:#334155;cursor:pointer;transition:all 0.25s;position:relative}
+.nav-item:hover,.nav-item.active{color:#a78bfa;background:rgba(124,58,237,0.18)}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:5px;font-size:9px;font-weight:600;font-family:'Orbitron',monospace;letter-spacing:0.05em}
+.badge-purple{background:rgba(124,58,237,0.18);color:#a78bfa;border:1px solid rgba(124,58,237,0.35)}
+.badge-teal{background:rgba(15,158,138,0.18);color:#5eead4;border:1px solid rgba(15,158,138,0.35)}
+.badge-amber{background:rgba(245,158,11,0.18);color:#fcd34d;border:1px solid rgba(245,158,11,0.35)}
+.badge-red{background:rgba(244,63,94,0.18);color:#fda4af;border:1px solid rgba(244,63,94,0.35)}
+.badge-green{background:rgba(74,222,128,0.18);color:#86efac;border:1px solid rgba(74,222,128,0.35)}
+.badge-gray{background:rgba(148,163,184,0.1);color:#94a3b8;border:1px solid rgba(148,163,184,0.2)}
+.planet-card{transition:transform 0.3s ease,box-shadow 0.3s ease}
+.planet-card:hover{transform:translateY(-4px)}
+.invasion-pulse{animation:invasion-glow 0.9s ease-in-out infinite}
+@keyframes invasion-glow{0%,100%{box-shadow:0 0 15px rgba(244,63,94,0.4)}50%{box-shadow:0 0 50px rgba(244,63,94,0.8)}}
+.legendary-card::after{content:'';position:absolute;inset:0;border-radius:16px;pointer-events:none;background:linear-gradient(105deg,transparent 40%,rgba(251,191,36,0.12) 50%,transparent 60%);background-size:200% 100%;animation:shimmer 2.5s infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes spin-slow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes spin-rev{from{transform:rotate(360deg)}to{transform:rotate(0deg)}}
+@keyframes star-twinkle{0%,100%{opacity:0.2}50%{opacity:1}}
+@keyframes loadbar{from{width:0}to{width:100%}}
+canvas{display:block}
