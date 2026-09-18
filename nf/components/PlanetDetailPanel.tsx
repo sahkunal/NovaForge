@@ -86,7 +86,22 @@ export default function PlanetDetailPanel({planet,onClose,onRefetch}:Props){
               <ActionButton label={planet.monsterPower>0?'⚔️ BATTLE & CLAIM':'⚡ Claim Resources'} loadingLabel="Processing tx..." successLabel="✓ Done!" status={cls} onClick={handleClaim} disabled={!planet.colonized} variant={planet.monsterPower>0?'danger':'teal'}/>
               <button onClick={()=>setShowUpgrade(true)} className="btn-primary w-full" style={{padding:'9px'}}>▲ Upgrade Planet / Military</button>
               <div className="grid grid-cols-2 gap-2">
-                <ActionButton label={planet.colonized?'⬛ Uncolonize':'🌐 Colonize'} loadingLabel="..." successLabel="✓" status={planet.colonized?us:cs} onClick={async()=>{planet.colonized?await uncolonize(planet.publicKey):(sounds.colonize(),await colonize(planet.publicKey));onRefetch?.()}} variant="ghost"/>
+                <ActionButton 
+                label={planet.colonized?'⬛ Uncolonize':'🌐 Colonize'} 
+                loadingLabel={planet.colonized?'Uncolonizing...':'Colonizing...'} 
+                successLabel="✓ Done!" 
+                status={planet.colonized?us:cs} 
+                onClick={async()=>{
+                  if(planet.colonized){
+                    await uncolonize(planet.publicKey)
+                  } else {
+                    sounds.colonize()
+                    await colonize(planet.publicKey)
+                  }
+                  setTimeout(()=>onRefetch?.(), 1500)
+                }} 
+                variant="ghost"
+              />
                 <button onClick={()=>!planet.colonized&&setShowListing(true)} className={`btn-ghost ${planet.colonized?'btn-disabled':''}`} style={{fontSize:'10px'}}>{planet.listed?'✕ Cancel':'🏪 List for Sale'}</button>
               </div>
             </>
