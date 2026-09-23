@@ -65,11 +65,14 @@ export default function PlanetCard({planet,onClick,selected}:Props){
             ))}
           </div>
         )}
-        <div className="flex items-center gap-1 flex-wrap">
-          {planet.listed&&<span className="badge badge-amber" style={{fontSize:'8px'}}>For Sale</span>}
-          {planet.productionBoost>0&&<span className="badge badge-green" style={{fontSize:'8px'}}>+{planet.productionBoost}% Boost</span>}
-          {threat==='critical'&&<span className="badge badge-red animate-pulse" style={{fontSize:'8px'}}>⚠ CRITICAL</span>}
-          {!planet.colonized&&!planet.inactive&&<span className="badge badge-gray" style={{fontSize:'8px'}}>Not Colonized</span>}
+        <div className="flex items-center justify-between gap-1 flex-wrap">
+          <div className="flex gap-1 flex-wrap">
+            {planet.listed&&<span className="badge badge-amber" style={{fontSize:'8px'}}>For Sale</span>}
+            {planet.productionBoost>0&&<span className="badge badge-green" style={{fontSize:'8px'}}>+{planet.productionBoost}% Boost</span>}
+            {threat==='critical'&&<span className="badge badge-red animate-pulse" style={{fontSize:'8px'}}>⚠ CRITICAL</span>}
+            {!planet.colonized&&!planet.inactive&&<span className="badge badge-gray" style={{fontSize:'8px'}}>Not Colonized</span>}
+          </div>
+          <span style={{fontFamily:'Orbitron,monospace',fontSize:'8px',color:'#334155',letterSpacing:'0.05em'}}>Click to manage →</span>
         </div>
       </div>
       <div className="h-0.5 w-full" style={{background:`linear-gradient(to right,transparent,${col.primary}50,transparent)`}}/>

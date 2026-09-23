@@ -11,6 +11,7 @@ import PlanetCard from '@/components/PlanetCard'
 import PlanetDetailPanel from '@/components/PlanetDetailPanel'
 import MintModal from '@/components/MintModal'
 import EntryScreen from '@/components/EntryScreen'
+import GameGuide from '@/components/GameGuide'
 import AttackWarningBanner from '@/components/AttackWarningBanner'
 import{sounds}from '@/lib/utils/sounds'
 const StarField=dynamic(()=>import('@/components/StarField'),{ssr:false})
@@ -20,6 +21,7 @@ export default function Dashboard(){
   const{planets,loading,refetch}=usePlanets(connected?publicKey:null)
   const[selected,setSelected]=useState<Planet|null>(null)
   const[showMint,setShowMint]=useState(false)
+  const[showGuide,setShowGuide]=useState(false)
   const{execute:mint,status:mintStatus,error:mintError}=useInitializePlanet()
   useEffect(()=>{setMounted(true)},[])
   if(!mounted) return null
@@ -67,6 +69,7 @@ export default function Dashboard(){
         </div>
       </div>
       {selected&&<div className="absolute right-0 bottom-0 z-30 overflow-hidden" style={{top:48,width:286,background:'rgba(6,4,18,0.98)',backdropFilter:'blur(24px)',borderLeft:'1px solid rgba(124,58,237,0.18)'}}><PlanetDetailPanel planet={selected} onClose={()=>setSelected(null)} onRefetch={refetch}/></div>}
+      {showGuide&&<GameGuide planets={planets} onClose={()=>setShowGuide(false)}/>}
       {showMint&&<MintModal onClose={()=>setShowMint(false)} onMint={handleMint} minting={mintStatus==='pending'} mintStatus={mintStatus} mintError={mintError}/>}
       <style>{`@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}`}</style>
     </div>

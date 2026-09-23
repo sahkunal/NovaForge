@@ -62,4 +62,8 @@ pub mod novaforge {
      pub fn cancel_listing(ctx: Context<CancelListing>) -> Result<()> {
         instructions::cancel_listing::handler(ctx)
     }
+
+      pub fn raid_planet(ctx: Context<RaidPlanet>) -> Result<()> {
+        instructions::raid_planet::handler(ctx)
+    }
 }

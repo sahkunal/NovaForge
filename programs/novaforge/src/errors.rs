@@ -46,5 +46,20 @@ pub enum NovaForgeError {
     CannotBuyOwnPlanet,
 
     #[msg("No active monster to resolve")]
-NoActiveMonster,
+    NoActiveMonster,
+
+    #[msg("Cannot raid your own planet")]
+    CannotRaidOwnPlanet,
+
+    #[msg("Target planet is not colonized")]
+    TargetNotColonized,
+
+    #[msg("Target planet is inactive")]
+    TargetInactive,
+
+    #[msg("Insufficient military power to raid")]
+    InsufficientMilitary,
+
+    #[msg("Raid cooldown active — wait 6 hours between raids")]
+    RaidOnCooldown,
 }

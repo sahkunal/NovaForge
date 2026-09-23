@@ -9,6 +9,7 @@ pub mod list_planet;
 pub mod repair_planet;
 pub mod buy_planet;
 pub mod cancel_listing;
+pub mod raid_planet;
 
 pub use initialize_planet::*;
 pub use colonize_planet::*;
@@ -21,3 +22,4 @@ pub use list_planet::*;
 pub use repair_planet::*;
 pub use buy_planet::*;
 pub use cancel_listing::*;
+pub use raid_planet::*;

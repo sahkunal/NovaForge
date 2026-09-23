@@ -101,3 +101,16 @@ pub struct MonsterAttacking {
     pub defense_power:  u32,
     pub timestamp:      i64,
 }
+
+#[event]
+pub struct PlanetRaided {
+    pub attacker:        Pubkey,
+    pub attacker_planet: Pubkey,
+    pub target_planet:   Pubkey,
+    pub target_owner:    Pubkey,
+    pub iron_looted:     u64,
+    pub gold_looted:     u64,
+    pub uranium_looted:  u64,
+    pub attacker_won:    bool,
+    pub timestamp:       i64,
+}

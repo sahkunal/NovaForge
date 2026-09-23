@@ -1,8 +1,14 @@
 'use client'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { LayoutGrid, ShoppingCart, User, Map } from 'lucide-react'
-const NAV=[{href:'/',icon:Map,label:'Star Map'},{href:'/dashboard',icon:LayoutGrid,label:'Dashboard'},{href:'/marketplace',icon:ShoppingCart,label:'Market'},{href:'/profile',icon:User,label:'Profile'}]
+import { LayoutGrid, ShoppingCart, User, Map, Trophy } from 'lucide-react'
+const NAV=[
+  {href:'/',icon:Map,label:'Star Map'},
+  {href:'/dashboard',icon:LayoutGrid,label:'Dashboard'},
+  {href:'/leaderboard',icon:Trophy,label:'Leaderboard'},
+  {href:'/marketplace',icon:ShoppingCart,label:'Market'},
+  {href:'/profile',icon:User,label:'Profile'},
+]
 export default function NavigationBar(){
   const path=usePathname()
   return(
@@ -12,7 +18,7 @@ export default function NavigationBar(){
         <span style={{fontFamily:'Orbitron,monospace',fontSize:'7px',color:'#7c3aed',letterSpacing:'0.1em',marginTop:4}}>NF</span>
       </div>
       {NAV.map(({href,icon:Icon,label})=>{
-        const active=path===href
+        const active=path===href||(href==='/leaderboard'&&path.startsWith('/leaderboard'))
         return(
           <Link key={href} href={href} title={label} className={`nav-item relative group ${active?'active':''}`} style={active?{color:'#a78bfa',background:'rgba(124,58,237,0.18)'}:{}}>
             {active&&<div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-7 rounded-r" style={{background:'linear-gradient(to bottom,#7c3aed,#0f9e8a)'}}/>}
