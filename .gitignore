@@ -7,3 +7,20 @@ test-ledger
 .yarn
 .surfpool
 nf/.next/
+# Next.js
+nf/out/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# OS
+Thumbs.db
