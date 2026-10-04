@@ -1,5 +1,5 @@
 'use client'
-import { useNovaWallet } from '@/lib/hooks/useWallet'
+import{useNovaWallet}from'@/lib/hooks/useWallet'
 export default function WalletConnect(){
   const{connected,publicKey,balance,connect,disconnect}=useNovaWallet()
   if(!connected)return<button onClick={connect} className="btn-primary flex items-center gap-2" style={{padding:'7px 18px',fontSize:'11px'}}><span>◎</span>Connect Wallet</button>

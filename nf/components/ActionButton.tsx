@@ -1,5 +1,5 @@
 'use client'
-import { ActionStatus } from '@/lib/hooks/useAnchorActions'
+import{ActionStatus}from'@/lib/hooks/useAnchorActions'
 interface Props{label:string;loadingLabel?:string;successLabel?:string;status:ActionStatus;onClick:()=>void;variant?:'primary'|'teal'|'ghost'|'danger';disabled?:boolean;className?:string}
 export default function ActionButton({label,loadingLabel,successLabel,status,onClick,variant='primary',disabled,className=''}:Props){
   const isLoading=status==='pending',isSuccess=status==='success',isError=status==='error'

@@ -1,68 +1,36 @@
 'use client'
-import{useState,useCallback,useEffect}from 'react'
-import dynamic from 'next/dynamic'
-import{Planet}from '@/lib/types'
-import{useNovaWallet}from '@/lib/hooks/useWallet'
-import{usePlanets}from '@/lib/hooks/usePlanets'
-import NavigationBar from '@/components/NavigationBar'
-import TopBar from '@/components/TopBar'
-import PlanetDetailPanel from '@/components/PlanetDetailPanel'
-import AttackWarningBanner from '@/components/AttackWarningBanner'
+import{useState,useEffect}from'react'
+import dynamic from'next/dynamic'
+import{useNovaWallet}from'@/lib/hooks/useWallet'
+import{usePlanets}from'@/lib/hooks/usePlanets'
+import EntryScreen from'@/components/EntryScreen'
+import PlanetDetailPanel from'@/components/PlanetDetailPanel'
+import GalaxyHUD from'@/components/hud/GalaxyHUD'
+import ThreatRadar,{RadarThreat}from'@/components/hud/ThreatRadar'
+import PlanetHUD from'@/components/hud/PlanetHUD'
+const NovaForgeScene=dynamic(()=>import('@/components/scene/NovaForgeScene'),{ssr:false})
 const SplashScreen=dynamic(()=>import('@/components/SplashScreen'),{ssr:false})
-const EntryScreen=dynamic(()=>import('@/components/EntryScreen'),{ssr:false})
-const StarField=dynamic(()=>import('@/components/StarField'),{ssr:false})
-const SpaceMap=dynamic(()=>import('@/components/SpaceMap'),{ssr:false})
 export default function Home(){
-  const[mounted,setMounted]=useState(false)
-  const[splashDone,setSplashDone]=useState(false)
-  const[selected,setSelected]=useState<Planet|null>(null)
-  const{connected,publicKey}=useNovaWallet()
-  const{planets,loading,refetch}=usePlanets(connected?publicKey:null)
-  useEffect(()=>{setMounted(true)},[])
-  const handleSelect=useCallback((p:Planet)=>setSelected(prev=>prev?.publicKey===p.publicKey?null:p),[])
-  if(!mounted) return null
-  if(!splashDone) return <SplashScreen onDone={()=>setSplashDone(true)}/>
-  if(!connected) return <EntryScreen/>
-  const atRisk=planets.filter(p=>p.threatLevel>=50).length,kills=planets.reduce((a,p)=>a+p.monstersKilled,0)
-  return(
-    <div className="fixed inset-0 overflow-hidden">
-      <StarField/><NavigationBar/><TopBar/>
-      <AttackWarningBanner planets={planets}/>
-      <div className="absolute inset-0" style={{left:64,top:48}}>
-        <div className="relative w-full h-full">
-          <SpaceMap planets={planets} onSelectPlanet={handleSelect} selectedId={selected?.publicKey}/>
-          <div className="absolute top-4 left-4 rounded-xl px-4 py-2.5 flex items-center gap-4" style={{background:'rgba(6,4,18,0.88)',border:'1px solid rgba(124,58,237,0.2)',backdropFilter:'blur(16px)'}}>
-            <div className="flex items-center gap-2"><span style={{fontFamily:'Orbitron,monospace',fontSize:'9px',color:'#6d28d9',letterSpacing:'0.12em'}}>PLANETS</span><span className="text-white font-bold font-mono">{loading?'—':planets.length}<span className="text-slate-600">/10</span></span></div>
-            <div className="w-px h-4 bg-purple-500/20"/>
-            <div className="flex items-center gap-2"><span style={{fontFamily:'Orbitron,monospace',fontSize:'9px',color:'#4ade80',letterSpacing:'0.12em'}}>KILLS</span><span className="text-white font-bold font-mono">{kills}</span></div>
-            {atRisk>0&&<><div className="w-px h-4 bg-purple-500/20"/><div className="flex items-center gap-2 animate-pulse"><span style={{fontFamily:'Orbitron,monospace',fontSize:'9px',color:'#f43f5e'}}>⚠ AT RISK</span><span className="text-red-400 font-bold font-mono">{atRisk}</span></div></>}
-            <div className="w-px h-4 bg-purple-500/20"/>
-            <button onClick={refetch} className="text-slate-600 hover:text-white transition-colors text-sm">↻</button>
-          </div>
-          {!loading&&planets.length===0&&(
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 pointer-events-none">
-              <div style={{fontSize:'72px',animation:'float 4s ease-in-out infinite'}}>🪐</div>
-              <div className="text-center pointer-events-auto">
-                <p style={{fontFamily:'Orbitron,monospace',fontSize:'18px',color:'#e2e8f0',fontWeight:700,letterSpacing:'0.1em',marginBottom:8}}>YOUR EMPIRE AWAITS</p>
-                <p className="text-slate-400 text-sm mb-6">Mint your first planet to begin</p>
-                <a href="/dashboard" className="btn-primary" style={{padding:'12px 32px',fontSize:'12px',textDecoration:'none',display:'inline-block'}}>⬡ Mint First Planet</a>
-              </div>
-            </div>
-          )}
-          <div className="absolute bottom-6 left-4 rounded-xl px-3 py-3" style={{background:'rgba(6,4,18,0.88)',border:'1px solid rgba(124,58,237,0.15)',backdropFilter:'blur(16px)'}}>
-            <div style={{fontFamily:'Orbitron,monospace',fontSize:'8px',color:'#334155',letterSpacing:'0.12em',marginBottom:6}}>THREAT LEVEL</div>
-            {[['#4ade80','Safe'],['#fbbf24','Warning'],['#f97316','Danger'],['#f43f5e','Critical']].map(([c,l])=>(
-              <div key={l} className="flex items-center gap-2 mb-1.5"><div className="w-2 h-2 rounded-full flex-shrink-0" style={{background:c}}/><span className="text-xs text-slate-400">{l}</span></div>
-            ))}
-          </div>
-        </div>
-      </div>
-      {selected&&(
-        <div className="absolute right-0 bottom-0 z-30 overflow-hidden" style={{top:48,width:286,background:'rgba(6,4,18,0.98)',backdropFilter:'blur(24px)',borderLeft:'1px solid rgba(124,58,237,0.18)'}}>
-          <PlanetDetailPanel planet={selected} onClose={()=>setSelected(null)} onRefetch={refetch}/>
-        </div>
-      )}
-      <style>{`@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}`}</style>
-    </div>
-  )
+ const[mounted,setMounted]=useState(false)
+ const[splash,setSplash]=useState(true)
+ const[selectedId,setSelectedId]=useState<string|null>(null)
+ const[detailOpen,setDetailOpen]=useState(false)
+ const{connected,publicKey,balance}=useNovaWallet()
+ const{planets,loading,refetch}=usePlanets(connected?publicKey:null)
+ const selected=planets.find(p=>p.publicKey===selectedId)||null
+ useEffect(()=>{setMounted(true)},[])
+ if(!mounted)return null
+ if(splash)return<SplashScreen onDone={()=>setSplash(false)}/>
+ if(!connected)return<EntryScreen/>
+ const threats:RadarThreat[]=planets.filter(p=>p.threatLevel>0||p.monsterPower>0).map(p=>({id:p.publicKey,name:`${p.planetType} // ${p.publicKey.slice(0,5)}`,power:p.monsterPower,level:p.level,severity:p.threatLevel>=80?'CRITICAL':p.threatLevel>=55?'HIGH':p.threatLevel>=25?'MEDIUM':'LOW'}))
+ return <div className="fixed inset-0 overflow-hidden bg-[#010208]">
+   <NovaForgeScene planets={planets} selectedPlanet={selected} onPlanetSelect={p=>setSelectedId(p.publicKey===selectedId?null:p.publicKey)}/>
+   <GalaxyHUD planetCount={planets.length} threatCount={threats.length} solBalance={balance} walletAddress={publicKey} connected={connected}/>
+   <ThreatRadar threats={threats} onSelect={t=>setSelectedId(t.id)}/>
+   {selected&&<PlanetHUD planet={selected} onClose={()=>setSelectedId(null)} onManage={()=>setDetailOpen(true)} onAttack={()=>setDetailOpen(true)}/>}
+   {selected&&detailOpen&&<div className="nf-existing-detail"><PlanetDetailPanel planet={selected} onClose={()=>setDetailOpen(false)} onRefetch={refetch}/></div>}
+   <div className="nf-bottom-nav"><a href="/" className="active">GALAXY</a><a href="/marketplace">MARKET</a><a href="/leaderboard">RANKINGS</a><a href="/dashboard">COMMAND</a></div>
+   {loading&&<div className="nf-loading">SYNCHRONIZING SECTOR...</div>}
+   {planets.length===0&&!loading&&<div className="nf-empty"><div>NO COLONIZED PLANETS DETECTED</div><a href="/dashboard">OPEN COMMAND // MINT PLANET</a></div>}
+ </div>
 }
