@@ -1,12 +1,13 @@
 use anchor_lang::prelude::*;
 use shared::{PlanetType, Rarity};
+use crate::state::BuildingType;
 
 pub mod state;
 pub mod errors;
 pub mod events;
 pub mod utils;
 pub mod instructions;
-
+pub mod constants;
 use instructions::*;
 
 declare_id!("4RmfPaedo1BpddXzwASa2LU6YJ9pZ6XafwJGxRm22bsB");
@@ -66,4 +67,40 @@ pub mod novaforge {
       pub fn raid_planet(ctx: Context<RaidPlanet>) -> Result<()> {
         instructions::raid_planet::handler(ctx)
     }
+
+    pub fn build_building(
+    ctx: Context<BuildBuilding>,
+    slot: u8,
+    building_type: BuildingType,
+) -> Result<()> {
+    instructions::build_building::handler(
+        ctx,
+        slot,
+        building_type,
+    )
+}
+
+pub fn upgrade_building(
+    ctx: Context<UpgradeBuilding>,
+) -> Result<()> {
+    instructions::upgrade_building::handler(ctx)
+}
+
+pub fn repair_building(
+    ctx: Context<RepairBuilding>,
+) -> Result<()> {
+    instructions::repair_building::handler(ctx)
+}
+
+pub fn launch_raid(
+    ctx: Context<LaunchRaid>,
+) -> Result<()> {
+    instructions::launch_raid::handler(ctx)
+}
+
+pub fn resolve_raid<'info>(
+    ctx: Context<'_, '_, '_, 'info, ResolveRaid<'info>>,
+) -> Result<()> {
+    instructions::resolve_raid::handler(ctx)
+}
 }

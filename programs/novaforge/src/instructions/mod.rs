@@ -10,6 +10,12 @@ pub mod repair_planet;
 pub mod buy_planet;
 pub mod cancel_listing;
 pub mod raid_planet;
+pub mod build_building;
+pub mod upgrade_building;
+pub mod repair_building;
+pub mod launch_raid;
+pub mod resolve_raid;
+pub mod resolve_monster_raid;
 
 pub use initialize_planet::*;
 pub use colonize_planet::*;
@@ -23,3 +29,10 @@ pub use repair_planet::*;
 pub use buy_planet::*;
 pub use cancel_listing::*;
 pub use raid_planet::*;
+pub use build_building::*;
+pub use upgrade_building::*;
+pub use repair_building::*;
+
+pub use launch_raid::*;
+pub use resolve_raid::*;
+pub use resolve_monster_raid::*;

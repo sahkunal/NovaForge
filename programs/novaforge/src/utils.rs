@@ -3,6 +3,8 @@ use anchor_lang::prelude::Account;
 use crate::state::Planet;
 use shared::PlanetType;
 use shared::constants::*;
+use crate::state::Building;
+use crate::state::BuildingType;
 
 
 pub fn calculate_resources(
@@ -141,5 +143,112 @@ fn apply_monster_victory(planet: &mut Account<'_, Planet>) {
             planet.inactive        = true;
         }
         _ => {}
+    }
+}
+    pub struct BuildingStats {
+    pub max_health: u32,
+    pub defense_power: u32,
+    pub fleet_power: u32,
+    pub iron_cost: u64,
+    pub gold_cost: u64,
+    pub uranium_cost: u64,
+}
+
+pub fn building_stats(
+    building_type: BuildingType,
+    level: u16,
+) -> BuildingStats {
+
+    let level = level.max(1) as u64;
+
+    let (base_health, defense_power, fleet_power): (u32, u32, u32) =
+        match building_type {
+
+            BuildingType::CommandCore => {
+                (1_000, 0, 0)
+            }
+
+            BuildingType::IronMine => {
+                (250, 0, 0)
+            }
+
+            BuildingType::GoldMine => {
+                (250, 0, 0)
+            }
+
+            BuildingType::UraniumReactor => {
+                (250, 0, 0)
+            }
+
+            BuildingType::Storage => {
+                (300, 0, 0)
+            }
+
+            BuildingType::ShieldGenerator => {
+                (600, 150, 0)
+            }
+
+            BuildingType::Turret => {
+                (350, 100, 0)
+            }
+
+            BuildingType::MissileBattery => {
+                (500, 175, 0)
+            }
+
+            BuildingType::OrbitalCannon => {
+                (700, 300, 0)
+            }
+
+            BuildingType::Shipyard => {
+                (400, 0, 100)
+            }
+        };
+
+    BuildingStats {
+        max_health: base_health.saturating_mul(level as u32),
+
+        defense_power: defense_power.saturating_mul(level as u32),
+
+        fleet_power: fleet_power.saturating_mul(level as u32),
+
+        iron_cost: 100u64
+            .saturating_mul(level),
+
+        gold_cost: 50u64
+            .saturating_mul(level),
+
+        uranium_cost: 25u64
+            .saturating_mul(level),
+    }
+}
+
+pub fn building_combat_power(
+    building: &Building,
+) -> u32 {
+
+    match building.building_type {
+
+        crate::state::BuildingType::ShieldGenerator => {
+            150u32.saturating_mul(building.level as u32)
+        }
+
+        crate::state::BuildingType::Turret => {
+            100u32.saturating_mul(building.level as u32)
+        }
+
+        crate::state::BuildingType::MissileBattery => {
+            175u32.saturating_mul(building.level as u32)
+        }
+
+        crate::state::BuildingType::OrbitalCannon => {
+            300u32.saturating_mul(building.level as u32)
+        }
+
+        crate::state::BuildingType::Shipyard => {
+            100u32.saturating_mul(building.level as u32)
+        }
+
+        _ => 0,
     }
 }

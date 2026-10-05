@@ -1,5 +1,7 @@
 use anchor_lang::prelude::*;
 use shared::{PlanetType, Rarity};
+use crate::state::BuildingType;
+
 #[event]
 pub struct PlanetCreated {
     pub owner:       Pubkey,
@@ -113,4 +115,52 @@ pub struct PlanetRaided {
     pub uranium_looted:  u64,
     pub attacker_won:    bool,
     pub timestamp:       i64,
+}
+
+#[event]
+pub struct BuildingConstructed {
+    pub owner: Pubkey,
+    pub planet: Pubkey,
+    pub building: Pubkey,
+    pub slot: u8,
+    pub building_type: BuildingType,
+    pub level: u16,
+}
+
+#[event]
+pub struct BuildingUpgraded {
+    pub owner: Pubkey,
+    pub planet: Pubkey,
+    pub building: Pubkey,
+    pub new_level: u16,
+}
+
+#[event]
+pub struct BuildingRepaired {
+    pub owner: Pubkey,
+    pub planet: Pubkey,
+    pub building: Pubkey,
+    pub iron_spent: u64,
+    pub gold_spent: u64,
+    pub uranium_spent: u64,
+}
+
+#[event]
+pub struct RaidLaunched {
+    pub attacker: Pubkey,
+    pub attacker_planet: Pubkey,
+    pub target_planet: Pubkey,
+    pub resolve_at: i64,
+}
+
+#[event]
+pub struct RaidResolved {
+    pub attacker: Pubkey,
+    pub attacker_planet: Pubkey,
+    pub target_planet: Pubkey,
+    pub attacker_won: bool,
+    pub iron_looted: u64,
+    pub gold_looted: u64,
+    pub uranium_looted: u64,
+    pub timestamp: i64,
 }
