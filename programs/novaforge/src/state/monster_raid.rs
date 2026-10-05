@@ -5,6 +5,7 @@ use anchor_lang::prelude::*;
     AnchorDeserialize,
     Clone,
     Copy,
+    Debug,
     InitSpace,
     PartialEq,
     Eq,

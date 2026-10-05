@@ -8,6 +8,10 @@ name = "planet"
 path = "planet.rs"
 
 [[test]]
+name = "new_features"
+path = "new_features.rs"
+
+[[test]]
 name = "colonization"
 path = "colonization.rs"
 
