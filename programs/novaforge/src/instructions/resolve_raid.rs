@@ -86,36 +86,63 @@ pub fn handler<'info>(
         NovaForgeError::RaidNotReady
     );
 
-    // --------------------------------------------------
-    // 2. Calculate defender power
-    // --------------------------------------------------
+    // 2. Calculate defender power using validated building slots.
 
-    let mut defender_power =
-        ctx.accounts.target_planet.military_power;
+let mut defender_power = ctx.accounts.target_planet.military_power;
 
-    for account_info in ctx.remaining_accounts.iter() {
-    if account_info.owner != ctx.program_id {
+require!(
+    ctx.remaining_accounts.len() == MAX_BUILDING_SLOTS as usize,
+    NovaForgeError::InvalidBuildingPlanet
+);
+
+for slot in 0..MAX_BUILDING_SLOTS {
+    let account_info = &ctx.remaining_accounts[slot as usize];
+
+    let (expected_pda, _) = Pubkey::find_program_address(
+        &[
+            BUILDING_SEED,
+            ctx.accounts.target_planet.key().as_ref(),
+            &[slot],
+        ],
+        ctx.program_id,
+    );
+
+    require_keys_eq!(
+        *account_info.key,
+        expected_pda,
+        NovaForgeError::InvalidBuildingPlanet
+    );
+
+    // An uninitialized slot is valid, but contributes no combat power.
+    if account_info.owner == &anchor_lang::system_program::ID
+        && account_info.data_is_empty()
+    {
         continue;
     }
 
-    let data = account_info.try_borrow_data()?;
+    require_keys_eq!(
+        *account_info.owner,
+        *ctx.program_id,
+        NovaForgeError::InvalidBuildingPlanet
+    );
 
-    let building = Building::try_deserialize(&mut &data[..])?;
+    let data = account_info.try_borrow_data()?;
+    let mut data_slice: &[u8] = &data;
+
+    let building = Building::try_deserialize(&mut data_slice)?;
 
     require!(
-        building.planet == ctx.accounts.target_planet.key(),
+        building.planet == ctx.accounts.target_planet.key()
+            && building.slot == slot,
         NovaForgeError::InvalidBuildingPlanet
     );
 
     if building.active && building.health > 0 {
         defender_power = defender_power
-            .saturating_add(building_combat_power(&building));
+            .checked_add(building_combat_power(&building))
+            .ok_or(NovaForgeError::ArithmeticOverflow)?;
     }
 }
-
-    // --------------------------------------------------
-    // 3. Get attacker power
-    // --------------------------------------------------
 
     let attacker_power =
         ctx.accounts.raid.attacker_power;
@@ -176,20 +203,23 @@ pub fn handler<'info>(
         let target =
             &mut ctx.accounts.target_planet;
 
-        let iron =
-            target.iron_balance
-                .saturating_mul(loot_percentage)
-                / 100;
+        let iron = target
+    .iron_balance
+    .checked_mul(loot_percentage)
+    .ok_or(NovaForgeError::ArithmeticOverflow)?
+    / 100;
 
-        let gold =
-            target.gold_balance
-                .saturating_mul(loot_percentage)
-                / 100;
+let gold = target
+    .gold_balance
+    .checked_mul(loot_percentage)
+    .ok_or(NovaForgeError::ArithmeticOverflow)?
+    / 100;
 
-        let uranium =
-            target.uranium_balance
-                .saturating_mul(loot_percentage)
-                / 100;
+let uranium = target
+    .uranium_balance
+    .checked_mul(loot_percentage)
+    .ok_or(NovaForgeError::ArithmeticOverflow)?
+    / 100;
 
         // Remove resources from defender.
         target.iron_balance =
@@ -220,17 +250,20 @@ pub fn handler<'info>(
         let attacker =
             &mut ctx.accounts.attacker_planet;
 
-        attacker.iron_balance =
-            attacker.iron_balance
-                .saturating_add(iron_looted);
+        attacker.iron_balance = attacker
+    .iron_balance
+    .checked_add(iron_looted)
+    .ok_or(NovaForgeError::ArithmeticOverflow)?;
 
-        attacker.gold_balance =
-            attacker.gold_balance
-                .saturating_add(gold_looted);
+attacker.gold_balance = attacker
+    .gold_balance
+    .checked_add(gold_looted)
+    .ok_or(NovaForgeError::ArithmeticOverflow)?;
 
-        attacker.uranium_balance =
-            attacker.uranium_balance
-                .saturating_add(uranium_looted);
+attacker.uranium_balance = attacker
+    .uranium_balance
+    .checked_add(uranium_looted)
+    .ok_or(NovaForgeError::ArithmeticOverflow)?;
     }
 
     // --------------------------------------------------

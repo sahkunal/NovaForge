@@ -32,10 +32,10 @@ pub attacker_planet: Account<'info, Planet>,
         payer = attacker,
         space = 8 + Raid::INIT_SPACE,
         seeds = [
-            RAID_SEED,
-            attacker_planet.key().as_ref()
-        ],
-        bump
+    RAID_SEED,
+    attacker_planet.key().as_ref()
+],
+bump
     )]
     pub raid: Account<'info, Raid>,
 
@@ -92,8 +92,12 @@ pub fn handler(
     raid.attacker_planet = attacker_planet.key();
     raid.target_planet = target_planet.key();
 
-    raid.started_at = now;
-    raid.resolve_at = now + RAID_DURATION;
+    let resolve_at = now
+    .checked_add(RAID_DURATION)
+    .ok_or(NovaForgeError::ArithmeticOverflow)?;
+
+raid.started_at = now;
+raid.resolve_at = resolve_at;
 
     raid.attacker_power = attacker_power;
     raid.defender_power = defender_power;

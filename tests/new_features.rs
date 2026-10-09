@@ -476,12 +476,45 @@ assert_eq!(
     );
 
     println!("✅ Raid launched");
+    let attacker_planet_bytes = attacker_planet.to_bytes();
+let started_at_bytes = raid.started_at.to_le_bytes();
+
+let program_id = Pubkey::new_from_array(prog_id().to_bytes());
+
+let (battle_report_pda, _) = Pubkey::find_program_address(
+    &[
+        b"battle_report",
+        &attacker_planet_bytes,
+        &started_at_bytes,
+    ],
+    &program_id,
+);
+
+let building_accounts: Vec<AccountMeta> = (0u8..25)
+    .map(|slot| {
+        let slot_bytes = [slot];
+
+        let (building_pda, _) = Pubkey::find_program_address(
+            &[
+                b"building",
+                &defender_planet.to_bytes(),
+                &slot_bytes,
+            ],
+            &program_id,
+        );
+
+        AccountMeta::new_readonly(
+            building_pda.to_bytes().into(),
+            false,
+        )
+    })
+    .collect();
 
     // --------------------------------------------------
     // Resolve too early
     // --------------------------------------------------
 
-    let mut resolve_data =
+    let resolve_data =
         discriminator("resolve_raid").to_vec();
 
     let result = std::panic::catch_unwind(
@@ -491,48 +524,25 @@ assert_eq!(
                 Instruction {
                     program_id:
                         prog_id().to_bytes().into(),
-                    accounts: vec![
-                        AccountMeta::new(
-                            attacker
-                                .pubkey()
-                                .to_bytes()
-                                .into(),
-                            true,
-                        ),
-                        AccountMeta::new(
-                            attacker_planet
-                                .to_bytes()
-                                .into(),
-                            false,
-                        ),
-                        AccountMeta::new(
-                            defender_planet
-                                .to_bytes()
-                                .into(),
-                            false,
-                        ),
-                        AccountMeta::new(
-                            raid_pda
-                                .to_bytes()
-                                .into(),
-                            false,
-                        ),
+                    accounts: {
+    let mut accounts = vec![
+        AccountMeta::new(attacker.pubkey(), true),
+        AccountMeta::new(attacker_planet.to_bytes().into(), false),
+        AccountMeta::new(defender_planet.to_bytes().into(), false),
+        AccountMeta::new(raid_pda.to_bytes().into(), false),
+        AccountMeta::new(
+    battle_report_pda.to_bytes().into(),
+    false,
+),
+AccountMeta::new_readonly(
+    Pubkey::default().to_bytes().into(),
+    false,
+),
+    ];
 
-                        // Battle report PDA.
-                        AccountMeta::new(
-                            Pubkey::default()
-                                .to_bytes()
-                                .into(),
-                            false,
-                        ),
-
-                        AccountMeta::new_readonly(
-                            Pubkey::default()
-                                .to_bytes()
-                                .into(),
-                            false,
-                        ),
-                    ],
+    accounts.extend(building_accounts.iter().cloned());
+    accounts
+},
                     data: resolve_data.clone(),
                 },
                 &attacker,
@@ -565,14 +575,14 @@ let started_at_bytes = raid.started_at.to_le_bytes();
 
 let program_id = Pubkey::new_from_array(prog_id().to_bytes());
 
-let (battle_report_pda, _) = Pubkey::find_program_address(
-    &[
-        b"battle_report".as_ref(),
-        attacker_planet_bytes.as_ref(),
-        started_at_bytes.as_ref(),
-    ],
-    &program_id,
-);
+// let (battle_report_pda, _) = Pubkey::find_program_address(
+//     &[
+//         b"battle_report".as_ref(),
+//         attacker_planet_bytes.as_ref(),
+//         started_at_bytes.as_ref(),
+//     ],
+//     &program_id,
+// );
 
     send(
         &mut svm,

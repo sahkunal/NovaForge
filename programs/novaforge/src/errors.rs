@@ -104,4 +104,7 @@ pub enum NovaForgeError {
 
     #[msg("Invalid building planet")]
     InvalidBuildingPlanet,
+
+    #[msg("arithmetic overflow")]
+    ArithmeticOverflow
 }

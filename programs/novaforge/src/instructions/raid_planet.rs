@@ -15,7 +15,8 @@ pub struct RaidPlanet<'info> {
     #[account(
         mut,
         has_one = owner @ NovaForgeError::Unauthorized,
-        constraint = attacker_planet.owner == attacker.key() @ NovaForgeError::Unauthorized,
+        constraint = attacker_planet.owner == attacker.key()
+    @ NovaForgeError::Unauthorized,
     )]
     pub attacker_planet: Account<'info, Planet>,
 
