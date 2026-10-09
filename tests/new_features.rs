@@ -1,6 +1,6 @@
 use litesvm::LiteSVM;
 use solana_keypair::Keypair;
-use solana_address::Address;
+use anchor_lang::prelude::Pubkey;
 use solana_signer::Signer;
 use solana_instruction::{AccountMeta, Instruction};
 use borsh::{BorshDeserialize, BorshSerialize};
@@ -184,10 +184,10 @@ fn test_building_lifecycle() {
     let building: Building =
         fetch_account(&svm, &building_pda);
 
-    assert_eq!(
-        building.planet,
-        planet_pda
-    );
+   assert_eq!(
+    building.planet,
+    Pubkey::new_from_array(planet_pda.to_bytes())
+);
 
     assert_eq!(
         building.slot,
@@ -454,15 +454,8 @@ fn test_pvp_raid() {
     let raid: Raid =
         fetch_account(&svm, &raid_pda);
 
-   assert_eq!(
-    raid.attacker,
-    keypair_pubkey(&attacker)
-);
-
-assert_eq!(
-    raid.defender,
-    keypair_pubkey(&defender)
-);
+   assert_eq!(raid.attacker, keypair_pubkey(&attacker));
+assert_eq!(raid.defender, keypair_pubkey(&defender));
 
 assert_eq!(
     raid.attacker_planet,
@@ -565,18 +558,21 @@ assert_eq!(
 
     // We need the actual BattleReport PDA.
     let raid: Raid =
-        fetch_account(&svm, &raid_pda);
+    fetch_account(&svm, &raid_pda);
 
-    let battle_report_pda =
-        Pubkey::find_program_address(
-            &[
-                b"battle_report",
-                &attacker_planet.to_bytes(),
-                &raid.started_at.to_le_bytes(),
-            ],
-            &prog_id(),
-        )
-        .0;
+let attacker_planet_bytes = attacker_planet.to_bytes();
+let started_at_bytes = raid.started_at.to_le_bytes();
+
+let program_id = Pubkey::new_from_array(prog_id().to_bytes());
+
+let (battle_report_pda, _) = Pubkey::find_program_address(
+    &[
+        b"battle_report".as_ref(),
+        attacker_planet_bytes.as_ref(),
+        started_at_bytes.as_ref(),
+    ],
+    &program_id,
+);
 
     send(
         &mut svm,
