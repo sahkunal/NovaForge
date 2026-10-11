@@ -97,7 +97,6 @@ require!(
 
 for slot in 0..MAX_BUILDING_SLOTS {
     let account_info = &ctx.remaining_accounts[slot as usize];
-
     let (expected_pda, _) = Pubkey::find_program_address(
         &[
             BUILDING_SEED,
@@ -106,6 +105,12 @@ for slot in 0..MAX_BUILDING_SLOTS {
         ],
         ctx.program_id,
     );
+
+    msg!("Checking building slot {}", slot);
+    msg!("Provided account: {}", account_info.key);
+    msg!("Expected PDA: {}", expected_pda);
+    msg!("Owner: {}", account_info.owner);
+    msg!("Data length: {}", account_info.data_len());
 
     require_keys_eq!(
         *account_info.key,

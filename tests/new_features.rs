@@ -424,28 +424,31 @@ fn test_pvp_raid() {
         &mut svm,
         Instruction {
             program_id: prog_id().to_bytes().into(),
-            accounts: vec![
-                AccountMeta::new(
-                    attacker.pubkey().to_bytes().into(),
-                    true,
-                ),
-                AccountMeta::new(
-                    attacker_planet.to_bytes().into(),
-                    false,
-                ),
-                AccountMeta::new(
-                    defender_planet.to_bytes().into(),
-                    false,
-                ),
-                AccountMeta::new(
-                    raid_pda.to_bytes().into(),
-                    false,
-                ),
-                AccountMeta::new_readonly(
-                    Pubkey::default().to_bytes().into(),
-                    false,
-                ),
-            ],
+            
+
+accounts: vec![
+    AccountMeta::new(
+        attacker.pubkey().to_bytes().into(),
+        true,
+    ),
+    AccountMeta::new(
+        attacker_planet.to_bytes().into(),
+        false,
+    ),
+    AccountMeta::new(
+        defender_planet.to_bytes().into(),
+        false,
+    ),
+    AccountMeta::new(
+        raid_pda.to_bytes().into(),
+        false,
+    ),
+    AccountMeta::new_readonly(
+        Pubkey::default().to_bytes().into(),
+        false,
+    ),
+],
+
             data: discriminator("launch_raid").to_vec(),
         },
         &attacker,
@@ -590,48 +593,23 @@ let program_id = Pubkey::new_from_array(prog_id().to_bytes());
             program_id:
                 prog_id().to_bytes().into(),
 
-            accounts: vec![
-                AccountMeta::new(
-                    attacker
-                        .pubkey()
-                        .to_bytes()
-                        .into(),
-                    true,
-                ),
-                AccountMeta::new(
-                    attacker_planet
-                        .to_bytes()
-                        .into(),
-                    false,
-                ),
-                AccountMeta::new(
-                    defender_planet
-                        .to_bytes()
-                        .into(),
-                    false,
-                ),
-                AccountMeta::new(
-                    raid_pda
-                        .to_bytes()
-                        .into(),
-                    false,
-                ),
-                AccountMeta::new(
-                    battle_report_pda
-                        .to_bytes()
-                        .into(),
-                    false,
-                ),
-                AccountMeta::new_readonly(
-                    Pubkey::default()
-                        .to_bytes()
-                        .into(),
-                    false,
-                ),
-            ],
+            accounts: {
+    let mut accounts = vec![
+        AccountMeta::new(attacker.pubkey().to_bytes().into(), true),
+        AccountMeta::new(attacker_planet.to_bytes().into(), false),
+        AccountMeta::new(defender_planet.to_bytes().into(), false),
+        AccountMeta::new(raid_pda.to_bytes().into(), false),
+        AccountMeta::new(battle_report_pda.to_bytes().into(), false),
+        AccountMeta::new_readonly(
+            Pubkey::default().to_bytes().into(),
+            false,
+        ),
+    ];
 
-            data: resolve_data,
-
+    accounts.extend(building_accounts.iter().cloned());
+    accounts
+},
+data: resolve_data,
         },
         &attacker,
     );
