@@ -37,29 +37,19 @@ pub fn handler(ctx: Context<RaidPlanet>) -> Result<()> {
     let attacker_planet = &mut ctx.accounts.attacker_planet;
     let target_planet   = &mut ctx.accounts.target_planet;
 
-    // === VALIDATE ATTACKER ===
     require!(attacker_planet.colonized, NovaForgeError::PlanetNotColonized);
     require!(!attacker_planet.inactive,  NovaForgeError::PlanetInactive);
     require!(attacker_planet.military_power > 0, NovaForgeError::InsufficientMilitary);
 
-    // === VALIDATE TARGET ===
     require!(target_planet.colonized,  NovaForgeError::TargetNotColonized);
     require!(!target_planet.inactive,  NovaForgeError::TargetInactive);
 
-    // === COOLDOWN: 6 hours between raids on same target ===
-    // We store last raid time in last_monster_kill on attacker planet
-    // (In a future version add a dedicated raid_ts field)
+ 
     let hours_since_last_raid = (now - attacker_planet.last_monster_kill) / 3600;
     require!(hours_since_last_raid >= 6, NovaForgeError::RaidOnCooldown);
-
-    // === COMBAT CALCULATION ===
-    // Power ratio determines loot %
-    // If attacker_mil > target_mil → attacker wins
-    // Attacker always loses some military in the fight
     let attacker_mil = attacker_planet.military_power;
     let target_mil   = target_planet.military_power.max(1); // avoid div by zero
 
-    // Both sides take damage proportional to the other's power
     let DAMAGE_FACTOR: u32 = 30; // 30% damage per raid
 
     let attacker_damage = (target_mil * DAMAGE_FACTOR / 100).max(1);
@@ -73,7 +63,6 @@ pub fn handler(ctx: Context<RaidPlanet>) -> Result<()> {
     // Record raid timestamp
     attacker_planet.last_monster_kill = now;
 
-    // === DETERMINE OUTCOME ===
     let attacker_wins = attacker_mil > target_mil;
 
     let (iron_looted, gold_looted, uranium_looted);

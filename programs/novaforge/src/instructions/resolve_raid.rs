@@ -18,19 +18,15 @@ use crate::{
 #[derive(Accounts)]
 pub struct ResolveRaid<'info> {
 
-    /// Anyone can resolve the raid once the timer has expired.
     #[account(mut)]
     pub resolver: Signer<'info>,
 
-    /// Attacker planet
     #[account(mut)]
     pub attacker_planet: Account<'info, Planet>,
 
-    /// Target planet
     #[account(mut)]
     pub target_planet: Account<'info, Planet>,
 
-    /// Active raid
     #[account(
         mut,
         seeds = [
@@ -49,7 +45,6 @@ pub struct ResolveRaid<'info> {
     )]
     pub raid: Account<'info, Raid>,
 
-    /// Permanent battle report
     #[account(
         init,
         payer = resolver,
@@ -72,10 +67,6 @@ pub fn handler<'info>(
 
     let now = Clock::get()?.unix_timestamp;
 
-    // --------------------------------------------------
-    // 1. Validate raid
-    // --------------------------------------------------
-
     require!(
         ctx.accounts.raid.status == RaidStatus::InProgress,
         NovaForgeError::RaidNotReady
@@ -86,7 +77,7 @@ pub fn handler<'info>(
         NovaForgeError::RaidNotReady
     );
 
-    // 2. Calculate defender power using validated building slots.
+    //  Calculate defender power using validated building slots.
 
 let mut defender_power = ctx.accounts.target_planet.military_power;
 
@@ -152,16 +143,12 @@ for slot in 0..MAX_BUILDING_SLOTS {
     let attacker_power =
         ctx.accounts.raid.attacker_power;
 
-    // --------------------------------------------------
-    // 4. Determine winner
-    // --------------------------------------------------
+    // 4. Determine 
 
     let attacker_won =
         attacker_power > defender_power;
 
-    // --------------------------------------------------
     // 5. Calculate loot
-    // --------------------------------------------------
 
     let (
         iron_looted,
@@ -181,23 +168,6 @@ for slot in 0..MAX_BUILDING_SLOTS {
                 .unwrap_or(500)
                 .min(500)
         };
-
-        /*
-            Equal power:
-                10%
-
-            2x power:
-                20%
-
-            3x power:
-                30%
-
-            4x power:
-                40%
-
-            5x+:
-                50%
-        */
 
         let loot_percentage =
             10u64
@@ -246,9 +216,7 @@ let uranium = target
         (0, 0, 0)
     };
 
-    // --------------------------------------------------
     // 6. Give loot to attacker
-    // --------------------------------------------------
 
     if attacker_won {
 
@@ -271,9 +239,7 @@ attacker.uranium_balance = attacker
     .ok_or(NovaForgeError::ArithmeticOverflow)?;
     }
 
-    // --------------------------------------------------
     // 7. Create battle report
-    // --------------------------------------------------
 
     let winner =
         if attacker_won {
@@ -340,9 +306,7 @@ attacker.uranium_balance = attacker
             ctx.bumps.battle_report;
     }
 
-    // --------------------------------------------------
     // 8. Update raid status
-    // --------------------------------------------------
 
     ctx.accounts.raid.status =
         if attacker_won {
@@ -360,9 +324,7 @@ attacker.uranium_balance = attacker
     ctx.accounts.raid.uranium_looted =
         uranium_looted;
 
-    // --------------------------------------------------
     // 9. Emit event
-    // --------------------------------------------------
 
     emit!(RaidResolved {
         attacker: attacker_key,

@@ -27,9 +27,7 @@ fn test_building_lifecycle() {
 
     let owner = new_funded_keypair(&mut svm);
 
-    // --------------------------------------------------
     // Create planet
-    // --------------------------------------------------
 
     let asset = Keypair::new();
 
@@ -82,9 +80,7 @@ fn test_building_lifecycle() {
         &asset,
     );
 
-    // --------------------------------------------------
     // Colonize
-    // --------------------------------------------------
 
     send(
         &mut svm,
@@ -132,9 +128,7 @@ fn test_building_lifecycle() {
         &planet_pda,
     );
 
-    // --------------------------------------------------
     // Build Turret in slot 0
-    // --------------------------------------------------
 
     let slot = 0u8;
 
@@ -230,9 +224,7 @@ fn test_building_lifecycle() {
 
     println!("✅ Build Turret");
 
-    // --------------------------------------------------
     // Upgrade Turret
-    // --------------------------------------------------
 
     let mut data =
         discriminator("upgrade_building").to_vec();
@@ -306,9 +298,7 @@ fn test_building_lifecycle() {
             < damaged_building.max_health
     );
 
-    // --------------------------------------------------
     // Repair
-    // --------------------------------------------------
 
     send(
         &mut svm,
@@ -413,9 +403,7 @@ fn test_pvp_raid() {
         &attacker,
     );
 
-    // --------------------------------------------------
     // Launch raid
-    // --------------------------------------------------
 
     let raid_pda =
         find_raid_pda(&attacker_planet);
@@ -513,9 +501,7 @@ let building_accounts: Vec<AccountMeta> = (0u8..25)
     })
     .collect();
 
-    // --------------------------------------------------
     // Resolve too early
-    // --------------------------------------------------
 
     let resolve_data =
         discriminator("resolve_raid").to_vec();
@@ -559,15 +545,11 @@ AccountMeta::new_readonly(
 
     println!("✅ Raid cannot resolve early");
 
-    // --------------------------------------------------
     // Wait for raid
-    // --------------------------------------------------
 
     warp_time(&mut svm, 61);
 
-    // --------------------------------------------------
     // Resolve
-    // --------------------------------------------------
 
     // We need the actual BattleReport PDA.
     let raid: Raid =
@@ -578,14 +560,6 @@ let started_at_bytes = raid.started_at.to_le_bytes();
 
 let program_id = Pubkey::new_from_array(prog_id().to_bytes());
 
-// let (battle_report_pda, _) = Pubkey::find_program_address(
-//     &[
-//         b"battle_report".as_ref(),
-//         attacker_planet_bytes.as_ref(),
-//         started_at_bytes.as_ref(),
-//     ],
-//     &program_id,
-// );
 
     send(
         &mut svm,

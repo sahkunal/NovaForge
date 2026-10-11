@@ -8,15 +8,6 @@ use solana_transaction::Transaction;
 use solana_instruction::AccountMeta;
 use shared::{PlanetType, Rarity};
 use borsh::BorshSerialize;
-/*pub fn setup_svm() -> LiteSVM {
-    let mut svm = LiteSVM::new();
-    svm.add_program_from_file(
-        novaforge::ID.to_bytes(),
-        "../target/deploy/novaforge.so",
-    )
-    .expect("failed to load novaforge.so");
-    svm
-}*/
 
 pub fn fund(svm: &mut LiteSVM, pubkey: &Pubkey, lamports: u64) {
     svm.airdrop(pubkey, lamports).unwrap();
