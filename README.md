@@ -56,8 +56,7 @@ flowchart LR
     SH -. mirrored in .-> UI
 ```
 
-**Design in one paragraph.** Each planet is two linked things: an **MPL-Core asset** (ownership, transferability, marketplace freeze) and a **Planet state account** owned by the NovaForge program (level, type, rarity, threat, timestamps, listing data). The program never custodies the NFT during a listing. It instead applies MPL-Core's `FreezeDelegate` plugin so the asset stays in the seller's wallet but cannot be moved until the sale or cancellation. Resource generation is **lazy**: nothing runs on a timer. Production and monster threat are computed from elapsed time when the owner calls `claim_resources`.
-
+Each planet in **NovaForge** is represented by two interconnected components: an **MPL-Core asset**, which manages NFT ownership, transfers, and marketplace restrictions, and a **program-owned Planet state account**, which stores attributes such as level, type, rarity, threat level, timestamps, and listing information. The marketplace follows a **non-custodial architecture**, meaning NFTs remain in their owners' wallets even when listed for sale. Instead of transferring custody, the program uses MPL-Core's **FreezeDelegate plugin** to prevent transfers until the asset is sold or the listing is cancelled. Resource generation follows a **lazy computation model**, eliminating the need for continuous timers or background processes. Instead, accumulated resources and monster threats are calculated dynamically based on elapsed time whenever a player invokes the `claim_resources` instruction.
 ---
 
 ## Repository Layout
