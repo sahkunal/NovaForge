@@ -1,5 +1,5 @@
 # ⬡ NovaForge
-
+(lets play)
 **An on-chain idle strategy game on Solana where Planet NFTs are productive assets.**
 
 > Mint a planet → Colonize → Generate Iron, Gold & Uranium → Claim → Upgrade → Defend → Sell
